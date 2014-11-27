@@ -8,8 +8,12 @@ source setup/functions.sh # load our functions
 # Update system packages to make sure we have the latest upstream versions of things from Ubuntu.
 
 echo Updating system packages...
-hide_output apt-get update
-hide_output apt-get -y upgrade
+if [ "$DISTRO" == "Ubuntu" ]; then
+	hide_output apt-get update
+	hide_output apt-get -y upgrade
+elif [ "$DISTRO" == "RedHat" ]; then
+	yum update -y -q
+fi
 
 # Install basic utilities.
 #
@@ -21,18 +25,29 @@ hide_output apt-get -y upgrade
 # * fail2ban: scans log files for repeated failed login attempts and blocks the remote IP at the firewall
 # * sudo: allows privileged users to execute commands as root without being root
 
-apt_install python3 python3-dev python3-pip \
-	wget curl sudo \
-	haveged unattended-upgrades ntp fail2ban
+if [ "$DISTRO" == "Ubuntu" ]; then
+	apt_install python3 python3-dev python3-pip \
+		wget curl sudo \
+		haveged unattended-upgrades ntp fail2ban
+elif [ "$DISTRO" == "RedHat" ]; then
+	yum install ... \
+		wget curl sudo \
+		... ntp ...
+fi
 
-# Allow apt to install system updates automatically every day.
-
-cat > /etc/apt/apt.conf.d/02periodic <<EOF;
-APT::Periodic::MaxAge "7";
-APT::Periodic::Update-Package-Lists "1";
-APT::Periodic::Unattended-Upgrade "1";
-APT::Periodic::Verbose "1";
+function allow_apt_updates {
+	cat > /etc/apt/apt.conf.d/02periodic <<EOF;
+	APT::Periodic::MaxAge "7";
+	APT::Periodic::Update-Package-Lists "1";
+	APT::Periodic::Unattended-Upgrade "1";
+	APT::Periodic::Verbose "1";
 EOF
+}
+
+if [ "$DISTRO" == "Ubuntu" ]; then
+# Allow apt to install system updates automatically every day.
+	allow_apt_updates
+fi
 
 # ### Firewall
 

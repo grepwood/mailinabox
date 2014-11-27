@@ -1,10 +1,19 @@
+source setup/distro_support.sh
+detect_distro
+
 if [ -z "$NONINTERACTIVE" ]; then
 	# Install 'dialog' so we can ask the user questions. The original motivation for
 	# this was being able to ask the user for input even if stdin has been redirected,
 	# e.g. if we piped a bootstrapping install script to bash to get started. In that
 	# case, the nifty '[ -t 0 ]' test won't work. But with Vagrant we must suppress so we
 	# use a shell flag instead. Really supress any output from installing dialog.
-	hide_output apt-get -y install dialog
+	if [ "$DISTRO" == "Ubuntu" ]; then
+		hide_output apt-get -y install dialog
+	elif [ "$DISTRO" == "RedHat" ]; then
+		yum install dialog
+	elif [ "$SATISFIED" -eq "0" ]; then
+		exit
+	fi
 	message_box "Mail-in-a-Box Installation" \
 		"Hello and thanks for deploying a Mail-in-a-Box!
 		\n\nI'm going to ask you a few questions.

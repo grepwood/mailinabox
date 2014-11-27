@@ -1,6 +1,12 @@
 # Install the 'host', 'sed', and and 'nc' tools. This script is run before
 # the rest of the system setup so we may not yet have things installed.
-hide_output apt-get -y install bind9-host sed netcat-openbsd
+if [ "$DISTRO" == "Ubuntu" ]; then
+	hide_output apt-get -y install bind9-host sed netcat-openbsd
+elif [ "$DISTRO" == "RedHat" ]; then
+	yum install bind-utils sed nc -y -q
+	rm -f /usr/bin/nc.openbsd
+	ln -s nc /usr/bin/nc.openbsd
+fi
 
 # Stop if the PRIMARY_HOSTNAME is listed in the Spamhaus Domain Block List.
 # The user might have chosen a name that was previously in use by a spammer

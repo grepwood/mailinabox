@@ -16,10 +16,19 @@ if [[ $EUID -ne 0 ]]; then
 	exit
 fi
 
+source distro_support.sh
+prepare_crossdistro
+
 # Clone the Mail-in-a-Box repository if it doesn't exist.
 if [ ! -d $HOME/mailinabox ]; then
 	echo Installing git . . .
-	DEBIAN_FRONTEND=noninteractive apt-get -q -q install -y git < /dev/null
+	if [ "$DISTRO" == "RedHat" ]; then
+		CENTOS_FRONTEND=yum install git -y -q
+	elif [ "$DISTRO" == "Ubuntu" ]; then
+		DEBIAN_FRONTEND=noninteractive apt-get -q -q install -y git < /dev/null
+	else
+		exit
+	fi
 	echo
 
 	echo Downloading Mail-in-a-Box $TAG. . .
