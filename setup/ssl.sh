@@ -18,8 +18,11 @@
 
 source setup/functions.sh # load our functions
 source /etc/mailinabox.conf # load global vars
-
-apt_install openssl
+if [ "$DISTRO" == "Ubuntu" ]; then
+	apt_install openssl
+elif [ "$DISTRO" == "RedHat" ]; then
+	yum install -y -q openssl
+fi
 
 mkdir -p $STORAGE_ROOT/ssl
 # Generate a new private key.

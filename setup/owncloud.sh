@@ -6,14 +6,19 @@ source setup/functions.sh # load our functions
 source /etc/mailinabox.conf # load global vars
 
 # ### Installing ownCloud
+if [ "$DISTRO" == "Ubuntu" ]; then
+	apt_install \
+		dbconfig-common \
+		php5-cli php5-sqlite php5-gd php5-imap php5-curl php-pear php-apc curl \
+		libapr1 libtool libcurl4-openssl-dev php-xml-parser \
+		php5 php5-dev php5-gd php5-fpm memcached php5-memcache unzip
 
-apt_install \
-	dbconfig-common \
-	php5-cli php5-sqlite php5-gd php5-imap php5-curl php-pear php-apc curl libapr1 libtool libcurl4-openssl-dev php-xml-parser \
-	php5 php5-dev php5-gd php5-fpm memcached php5-memcache unzip
-
-apt-get purge -qq -y owncloud*
-
+	apt-get purge -qq -y owncloud*
+elif [ "$DISTRO" == "RedHat" ]; then
+	yum install php55-php-{cli,pear,xml,fpm} curl apr libtool libcurl-devel \
+		php55 memcached unzip
+#Remi needs to package PHP extension for memcached, gd, imap and sqlite
+fi
 # Install ownCloud from source of this version:
 owncloud_ver=7.0.3
 
@@ -137,5 +142,9 @@ chmod +x /etc/cron.hourly/mailinabox-owncloud
 # ```
 
 # Enable PHP modules and restart PHP.
-php5enmod imap
-restart_service php5-fpm
+if [ "$DISTRO" == "Ubuntu" ]; then
+	php5enmod imap
+	restart_service php5-fpm
+elif [ "$DISTRO" == "RedHat" ]; then
+	restart_service php55-php-fpm
+fi

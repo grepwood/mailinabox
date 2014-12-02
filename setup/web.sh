@@ -7,17 +7,35 @@ source /etc/mailinabox.conf # load global vars
 
 # Some Ubuntu images start off with Apache. Remove it since we
 # will use nginx. Use autoremove to remove any Apache depenencies.
-if [ -f /usr/sbin/apache2 ]; then
-	echo Removing apache...
-	hide_output apt-get -y purge apache2 apache2-*
-	hide_output apt-get -y --purge autoremove
+# Same goes for some RHEL/CentOS images.
+if [ "$DISTRO" == "Ubuntu" ]; then
+	if [ -f /usr/sbin/apache2 ]; then
+		echo Removing apache...
+		hide_output apt-get -y purge apache2 apache2-*
+		hide_output apt-get -y --purge autoremove
+	fi
+elif [ "$DISTRO" == "RedHat" ]; then
+	if [ "`rpm -qa httpd | wc -l`" -eq "1" ]; then
+		printf "Removing apache... "
+		yum remove httpd -y -q
+		echo "done!"
+	fi
 fi
 
 # Install nginx and a PHP FastCGI daemon.
 #
 # Turn off nginx's default website.
-
-apt_install nginx php5-fpm
+if [ "$DISTRO" == "Ubuntu" ]; then
+	apt_install nginx php5-fpm
+elif [ "$DISTRO" == "RedHat" ]; then
+	if [ "`rpm -qa epel-release | wc -l`" -eq "0" ]; then
+		rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm 2>/dev/null
+	fi
+	if [ "`rpm -qa remi-release | wc -l`" -eq "0" ]; then
+		rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm 2>/dev/null
+	fi
+	yum install nginx php55-php-fpm --enablerepo=epel -y -q
+fi
 
 rm -f /etc/nginx/sites-enabled/default
 
@@ -63,11 +81,13 @@ chown -R $STORAGE_USER $STORAGE_ROOT/www
 
 # We previously installed a custom init script to start the PHP FastCGI daemon. #NODOC
 # Remove it now that we're using php5-fpm. #NODOC
-if [ -L /etc/init.d/php-fastcgi ]; then
-	echo "Removing /etc/init.d/php-fastcgi, php5-cgi..." #NODOC
-	rm -f /etc/init.d/php-fastcgi #NODOC
-	hide_output update-rc.d php-fastcgi remove #NODOC
-	apt-get -y purge php5-cgi #NODOC
+if [ "$DISTRO" == "Ubuntu" ]; then
+	if [ -L /etc/init.d/php-fastcgi ]; then
+		echo "Removing /etc/init.d/php-fastcgi, php5-cgi..." #NODOC
+		rm -f /etc/init.d/php-fastcgi #NODOC
+		hide_output update-rc.d php-fastcgi remove #NODOC
+		apt-get -y purge php5-cgi #NODOC
+	fi
 fi
 
 # Remove obsoleted scripts. #NODOC
@@ -78,7 +98,11 @@ done #NODOC
 
 # Start services.
 restart_service nginx
-restart_service php5-fpm
+if [ "$DISTRO" == "Ubuntu" ]; then
+	restart_service php5-fpm
+elif [ "$DISTRO" == "RedHat" ]; then
+	restart_service php55-php-fpm
+fi
 
 # Open ports.
 ufw_allow http

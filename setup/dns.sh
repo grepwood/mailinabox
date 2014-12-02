@@ -27,8 +27,11 @@ fi
 # * nsd: The non-recursive nameserver that publishes our DNS records.
 # * ldnsutils: Helper utilities for signing DNSSEC zones.
 # * openssh-client: Provides ssh-keyscan which we use to create SSHFP records.
-
-apt_install nsd ldnsutils openssh-client
+if [ "$DISTRO" == "Ubuntu" ]; then
+	apt_install nsd ldnsutils openssh-client
+elif [ "$DISTRO" == "RedHat" ]; then
+	yum install ... openssh openssh-clients
+fi
 
 # Prepare nsd's configuration.
 

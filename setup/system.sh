@@ -56,7 +56,11 @@ fi
 # we skip this if the user sets DISABLE_FIREWALL=1. #NODOC
 if [ -z "$DISABLE_FIREWALL" ]; then
 	# Install `ufw` which provides a simple firewall configuration.
-	apt_install ufw
+	if [ "$DISTRO" == "Ubuntu" ]; then
+		apt_install ufw
+	elif [ "$DISTRO" == "RedHat" ]; then
+		source setup/supplement_ufw.sh
+	fi
 
 	# Allow incoming connections to SSH.
 	ufw_allow ssh;
@@ -101,7 +105,11 @@ fi #NODOC
 #   name server, on IPV6.
 # * The listen-on directive in named.conf.options restricts `bind9` to
 #   binding to the loopback interface instead of all interfaces.
-apt_install bind9 resolvconf
+if [ "$DISTRO" == "Ubuntu" ]; then
+	apt_install bind9 resolvconf
+elif [ "$DISTRO" == "RedHat" ]; then
+	yum install bind-utils openresolv
+fi
 tools/editconf.py /etc/default/bind9 \
 	RESOLVCONF=yes \
 	"OPTIONS=\"-u bind -4\""
@@ -115,6 +123,7 @@ if [ -f /etc/resolvconf/resolv.conf.d/original ]; then
 fi
 
 # Restart the DNS services.
-
-restart_service bind9
-restart_service resolvconf
+if [ "$DISTRO" == "Ubuntu" ]; then
+	restart_service bind9
+	restart_service resolvconf
+fi

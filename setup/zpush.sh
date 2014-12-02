@@ -14,11 +14,17 @@ source setup/functions.sh # load our functions
 source /etc/mailinabox.conf # load global vars
 
 # Prereqs.
+if [ "$DISTRO" == "Ubuntu" ]; then
+	apt_install \
+		php-soap php5-imap libawl-php php5-xsl
 
-apt_install \
-	php-soap php5-imap libawl-php php5-xsl
-
-php5enmod imap
+	php5enmod imap
+elif [ "$DISTRO" == "RedHat" ]; then
+	if [ "`rpm -qa remi-release | wc -l`" -eq "0" ]; then
+		rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm 2>/dev/null
+	fi
+	yum install php55-php-soap php55-php-imap php55-php-pecl-xslcache --enablerepo=remi -y -q
+fi
 
 # Copy Z-Push into place.
 TARGETHASH=d0cd5a47c53afac5c3b287006dc8a48a1c4ffcd5
@@ -80,5 +86,8 @@ chown www-data:www-data /var/log/z-push
 chown www-data:www-data /var/lib/z-push
 
 # Restart service.
-
-restart_service php5-fpm
+if [ "$DISTRO" == "Ubuntu" ]; then
+	restart_service php5-fpm
+elif [ "$DISTRO" == "RedHat" ]; then
+	restart_service php55-php-fpm
+fi

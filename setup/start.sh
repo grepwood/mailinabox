@@ -112,19 +112,19 @@ CSR_COUNTRY=$CSR_COUNTRY
 EOF
 
 # Start service configuration.
-source setup/system.sh
-source setup/ssl.sh
-source setup/dns.sh
-source setup/mail-postfix.sh
-source setup/mail-dovecot.sh
-source setup/mail-users.sh
-source setup/dkim.sh
-source setup/spamassassin.sh
-source setup/web.sh
-source setup/webmail.sh
-source setup/owncloud.sh
-source setup/zpush.sh
-source setup/management.sh
+source setup/system.sh #Needs work
+source setup/ssl.sh #Done
+source setup/dns.sh #Check UFW
+source setup/mail-postfix.sh #UFW
+source setup/mail-dovecot.sh #Done, check UFW
+source setup/mail-users.sh #No work needed
+source setup/dkim.sh #Done
+source setup/spamassassin.sh #Should work fine without dovecot-antispam
+source setup/web.sh #Should work!
+source setup/webmail.sh		#Check comments
+source setup/owncloud.sh	#Poke Remi to add missing packages
+source setup/zpush.sh		#Done
+source setup/management.sh	#Done
 
 # Write the DNS and nginx configuration files.
 sleep 5 # wait for the daemon to start

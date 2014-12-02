@@ -10,7 +10,14 @@ source setup/functions.sh # load our functions
 source /etc/mailinabox.conf # load global vars
 
 # Install DKIM...
-apt_install opendkim opendkim-tools
+if [ "$DISTRO" == "Ubuntu" ]; then
+	apt_install opendkim opendkim-tools
+elif [ "$DISTRO" == "RedHat" ]; then
+	if [ "`rpm -qa epel-release | wc -l`" -eq "0" ]; then
+		rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm 2>/dev/null
+	fi
+	yum install opendkim --enablerepo=epel -y -q
+fi
 
 # Make sure configuration directories exist.
 mkdir -p /etc/opendkim;

@@ -19,10 +19,13 @@ source setup/functions.sh # load our functions
 source /etc/mailinabox.conf # load global vars
 
 # Install packages...
-
-apt_install \
-	dovecot-core dovecot-imapd dovecot-lmtpd dovecot-sqlite sqlite3 \
-	dovecot-sieve dovecot-managesieved
+if [ "$DISTRO" == "Ubuntu" ]; then
+	apt_install \
+		dovecot-core dovecot-imapd dovecot-lmtpd dovecot-sqlite sqlite3 \
+		dovecot-sieve dovecot-managesieved
+elif [ "$DISTRO" == "RedHat" ]; then
+	yum install dovecot dovecot-pigeonhole -y -q
+fi
 
 # The `dovecot-imapd` and `dovecot-lmtpd` packages automatically enable IMAP and LMTP protocols.
 
