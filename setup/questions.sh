@@ -43,6 +43,9 @@ you really want.
 			"me@$DEFAULT_DOMAIN_GUESS" \
 			EMAIL_ADDR
 
+		echo $EMAIL_ADDR
+		EMAIL_ADDR=$result
+		echo $result
 		if [ -z "$EMAIL_ADDR" ]; then
 			# user hit ESC/cancel
 			exit
