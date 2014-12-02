@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 import subprocess, shutil, os, sqlite3, re
 import utils

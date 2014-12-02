@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 #
 # This is a tool Josh uses on his box serving mailinabox.email to parse the nginx
 # access log to see how many people are installing Mail-in-a-Box each day, by

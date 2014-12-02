@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 # Creates DNS zone files for all of the domains of all of the mail users
 # and mail aliases and restarts nsd.

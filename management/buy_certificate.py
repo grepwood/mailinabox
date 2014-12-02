@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 # Helps you purchase a SSL certificate from Gandi.net using
 # their API.

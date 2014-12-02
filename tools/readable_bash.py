@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 #
 # Generate documentation for how this machine works by
 # parsing our bash scripts!

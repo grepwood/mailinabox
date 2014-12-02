@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 import sys, getpass, urllib.request, urllib.error, json
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import smtplib, sys
 
 if len(sys.argv) < 3:
