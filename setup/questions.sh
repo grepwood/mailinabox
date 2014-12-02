@@ -44,8 +44,6 @@ you really want.
 			EMAIL_ADDR
 
 		echo $EMAIL_ADDR
-		EMAIL_ADDR=$result
-		echo $result
 		if [ -z "$EMAIL_ADDR" ]; then
 			# user hit ESC/cancel
 			exit
