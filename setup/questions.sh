@@ -45,7 +45,7 @@ you really want.
 
 		if [ -z "$EMAIL_ADDR" ]; then
 			# user hit ESC/cancel
-			exit
+#			exit
 		fi
 		while ! management/mailconfig.py validate-email "$EMAIL_ADDR"
 		do
