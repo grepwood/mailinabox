@@ -160,13 +160,11 @@ function input_box {
 	declare -n result=$4
 	declare -n result_code=$4_EXITCODE
 	result=$(dialog --stdout --title "$1" --inputbox "$2" 0 0 "$3")
-	echo $1
-	echo $2
-	echo $3
-	echo $result
 	if [ "$result" == "" ]; then
+		echo "failure"
 		result_code=1
 	else
+		echo "success $?"
 		result_code=$?
 	fi
 }
