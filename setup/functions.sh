@@ -164,7 +164,7 @@ function input_box {
 	echo $2
 	echo $3
 	echo $result
-	if [ -z $result ]; then
+	if [ ! -z $result ]; then
 		result_code=1
 	else
 		result_code=$?
