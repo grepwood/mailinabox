@@ -43,10 +43,11 @@ you really want.
 			"me@$DEFAULT_DOMAIN_GUESS" \
 			EMAIL_ADDR
 
-		echo $EMAIL_ADDR
-		if [ -z "$EMAIL_ADDR" ]; then
+		if [ "$result_code" -eq "1" ]; then
 			# user hit ESC/cancel
 			exit
+		else
+			EMAIL_ADDR=$result
 		fi
 		while ! management/mailconfig.py validate-email "$EMAIL_ADDR"
 		do

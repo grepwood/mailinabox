@@ -164,8 +164,11 @@ function input_box {
 	echo $2
 	echo $3
 	echo $result
-	echo $?
-	result_code=$?
+	if [ -z $result ]; then
+		result_code=1
+	else
+		result_code=$?
+	fi
 }
 
 function input_menu {
