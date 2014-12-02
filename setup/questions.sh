@@ -43,6 +43,7 @@ you really want.
 			"me@$DEFAULT_DOMAIN_GUESS" \
 			EMAIL_ADDR
 
+		echo "$result_code"
 		if [ "$result_code" -eq "1" ]; then
 			# user hit ESC/cancel
 			exit
