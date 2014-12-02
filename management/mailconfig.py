@@ -153,7 +153,10 @@ def get_mail_aliases(env):
 	# Returns a sorted list of tuples of (alias, forward-to string).
 	c = open_database(env)
 	c.execute('SELECT source, destination FROM aliases')
-	aliases = { row[0]: row[1] for row in c.fetchall() } # make dict
+	if sys.version_info[0] == 3:
+		aliases = { row[0]: row[1] for row in c.fetchall() } # make dict
+	elif sys.version_info[0] == 2:
+		aliases = { 0,1 }
 
 	# put in a canonical order: sort by domain, then by email address lexicographically
 	aliases = [ (source, aliases[source]) for source in utils.sort_email_addresses(aliases.keys(), env) ]
