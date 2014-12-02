@@ -1,4 +1,6 @@
+from __future__ import print_function
 import os.path
+	
 
 CONF_DIR = os.path.join(os.path.dirname(__file__), "../conf")
 
@@ -100,7 +102,6 @@ def exclusive_process(name):
                 # Check if the pid in it is valid.
                 if existing_pid:
                     if is_pid_valid(existing_pid):
-# This file assignment needs to be Python-neutral
                         print("Another %s is already running (pid %d)." % (name, existing_pid), file=sys.stderr)
                         sys.exit(1)
 
