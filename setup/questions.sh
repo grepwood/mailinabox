@@ -111,9 +111,10 @@ if [ -z "$PUBLIC_IP" ]; then
 			$DEFAULT_PUBLIC_IP \
 			PUBLIC_IP
 
-		if [ -z "$PUBLIC_IP" ]; then
-			# user hit ESC/cancel
+		if [ "$result_code" -ne "1" ]; then
 			exit
+		else
+			PUBLIC_IP=$result
 		fi
 	fi
 fi
@@ -193,8 +194,9 @@ if [ -z "$CSR_COUNTRY" ]; then
 		"$country_code_list" \
 		CSR_COUNTRY
 
-	if [ -z "$CSR_COUNTRY" ]; then
-		# user hit ESC/cancel
+	if [ "$result_code" -ne "1" ]; then
 		exit
+	else
+		CSR_COUNTRY=$result
 	fi
 fi
