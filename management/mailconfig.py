@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
-import subprocess, shutil, os, sqlite3, re
-# This assignment needs to be Python-neutral
+import subprocess, shutil, os, sqlite3, re, sys
 import utils
 
 def validate_email(email, mode=None):
@@ -154,13 +153,7 @@ def get_mail_aliases(env):
 	# Returns a sorted list of tuples of (alias, forward-to string).
 	c = open_database(env)
 	c.execute('SELECT source, destination FROM aliases')
-# This area needs to be Python-neutral
-	if sys.version_info[0] == 3:
-		aliases = { row[0]: row[1] for row in c.fetchall() } # make dict
-	elif sys.version_info[0] == 2:
-		aliases = { 0,1 }
-
-	print aliases
+	aliases = dict((row[0],row[1]) for row in c.fetchall()) # make dict
 	# put in a canonical order: sort by domain, then by email address lexicographically
 	aliases = [ (source, aliases[source]) for source in utils.sort_email_addresses(aliases.keys(), env) ]
 	return aliases
