@@ -17,6 +17,7 @@ if [ -z "`tools/mail.py user`" ]; then
 				# user hit ESC/cancel
 				exit
 			fi
+			echo "we should get an email now"
 			echo "$EMAIL_ADDR"
 			exit
 			while ! management/mailconfig.py validate-email "$EMAIL_ADDR"
