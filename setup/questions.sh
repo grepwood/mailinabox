@@ -194,6 +194,8 @@ if [ "$CSR_COUNTRY" == "" ]; then
 		"$country_code_list" \
 		$CSR_COUNTRY
 
+	echo "Please help me"
+	echo "$result"
 	if [ "$result_code" -ne "1" ]; then
 		exit
 	else
