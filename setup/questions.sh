@@ -196,6 +196,7 @@ if [ "$CSR_COUNTRY" == "" ]; then
 
 	echo "Please help me"
 	echo "$result"
+	echo "$result_code"
 	if [ "$result_code" -ne "1" ]; then
 		exit
 	else
