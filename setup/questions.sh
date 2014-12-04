@@ -44,6 +44,7 @@ you really want.
 			EMAIL_ADDR
 
 		echo "$result_code"
+		echo "$result"
 		if [ "$result_code" -eq "1" ]; then
 			# user hit ESC/cancel
 			exit
