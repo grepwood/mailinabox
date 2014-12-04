@@ -75,9 +75,10 @@ address, so we're suggesting $DEFAULT_PRIMARY_HOSTNAME.
 		$DEFAULT_PRIMARY_HOSTNAME \
 		PRIMARY_HOSTNAME
 
-	if [ -z "$PRIMARY_HOSTNAME" ]; then
-		# user hit ESC/cancel
+	if [ "$result_code" -ne "1" ]; then
 		exit
+	else
+		PRIMARY_HOSTNAME=$result
 	fi
 fi
 
