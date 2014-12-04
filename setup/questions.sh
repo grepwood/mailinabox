@@ -43,9 +43,7 @@ you really want.
 			"me@$DEFAULT_DOMAIN_GUESS" \
 			EMAIL_ADDR
 
-		echo "$result_code"
-		echo "$result"
-		if [ "$result_code" -eq "1" ]; then
+		if [ "$result_code" -ne "1" ]; then
 			# user hit ESC/cancel
 			exit
 		else
@@ -57,7 +55,7 @@ you really want.
 				"That's not a valid email address.\n\nWhat email address are you setting this box up to manage?" \
 				$EMAIL_ADDR \
 				EMAIL_ADDR
-			if [ -z "$EMAIL_ADDR" ]; then
+			if [ "$result_code" -ne "1" ]; then
 				# user hit ESC/cancel
 				exit
 			fi
