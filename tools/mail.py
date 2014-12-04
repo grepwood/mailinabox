@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+from __future__ import print_function
 import sys, getpass, urllib.request, urllib.error, json
 
 def mgmt(cmd, data=None, is_json=False):
