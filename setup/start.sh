@@ -112,6 +112,7 @@ CSR_COUNTRY=$CSR_COUNTRY
 EOF
 
 # Start service configuration.
+echo "I'm in `pwd`"
 source setup/system.sh #Needs work
 source setup/ssl.sh #Done
 source setup/dns.sh #Check UFW
