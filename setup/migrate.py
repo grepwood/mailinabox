@@ -5,6 +5,7 @@
 # We have to be careful here that any dependencies are already installed in the previous
 # version since this script runs before all other aspects of the setup script.
 
+from __future__ import print_function
 import sys, os, os.path, glob, re, shutil
 
 sys.path.insert(0, 'management')
