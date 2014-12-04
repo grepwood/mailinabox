@@ -13,11 +13,12 @@ if [ -z "`tools/mail.py user`" ]; then
 				me@`get_default_hostname` \
 				EMAIL_ADDR
 			
-			echo "$EMAIL_ADDR"
 			if [ "$EMAIL_ADDR" == " " ]; then
 				# user hit ESC/cancel
 				exit
 			fi
+			echo "$EMAIL_ADDR"
+			exit
 			while ! management/mailconfig.py validate-email "$EMAIL_ADDR"
 			do
 				input_box "Mail Account" \
