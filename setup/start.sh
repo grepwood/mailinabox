@@ -112,20 +112,33 @@ CSR_COUNTRY=$CSR_COUNTRY
 EOF
 
 # Start service configuration.
-echo "I'm in `pwd`"
+REAL_PWD=`pwd`
 source setup/system.sh #Needs work
+cd $REAL_PWD
 source setup/ssl.sh #Done
+cd $REAL_PWD
 source setup/dns.sh #Check UFW
+cd $REAL_PWD
 source setup/mail-postfix.sh #UFW
+cd $REAL_PWD
 source setup/mail-dovecot.sh #Done, check UFW
+cd $REAL_PWD
 source setup/mail-users.sh #No work needed
+cd $REAL_PWD
 source setup/dkim.sh #Done
+cd $REAL_PWD
 source setup/spamassassin.sh #Should work fine without dovecot-antispam
+cd $REAL_PWD
 source setup/web.sh #Should work!
+cd $REAL_PWD
 source setup/webmail.sh		#Check comments
+cd $REAL_PWD
 source setup/owncloud.sh	#Poke Remi to add missing packages
+cd $REAL_PWD
 source setup/zpush.sh		#Done
+cd $REAL_PWD
 source setup/management.sh	#Done
+cd $REAL_PWD
 
 # Write the DNS and nginx configuration files.
 sleep 5 # wait for the daemon to start

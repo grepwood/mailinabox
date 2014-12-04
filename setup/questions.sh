@@ -198,5 +198,4 @@ if [ "$CSR_COUNTRY" == "" ]; then
 		# user pressed Esc
 		exit
 	fi
-	echo "Yay!"
 fi
