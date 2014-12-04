@@ -11,8 +11,9 @@ if [ -z "`tools/mail.py user`" ]; then
 				"Let's create your first mail account.
 				\n\nWhat email address do you want?" \
 				me@`get_default_hostname` \
-				$EMAIL_ADDR
-
+				EMAIL_ADDR
+			
+			echo "$EMAIL_ADDR"
 			if [ "$EMAIL_ADDR" == " " ]; then
 				# user hit ESC/cancel
 				exit
