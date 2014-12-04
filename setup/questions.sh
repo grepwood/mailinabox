@@ -194,10 +194,10 @@ if [ "$CSR_COUNTRY" == "" ]; then
 		"$country_code_list" \
 		$CSR_COUNTRY
 
-	echo "Please help me"
 	echo "$result"
 	echo "$result_code"
 	if [ "$CSR_COUNTRY" == "" ]; then
+		echo "this is a breakpoint"
 		exit
 	fi
 	echo "Yay!"
