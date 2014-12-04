@@ -181,7 +181,7 @@ if [ ! -z "$DEFAULT_STORAGE_ROOT" ] && [ ! -z "$DEFAULT_CSR_COUNTRY" ] && [ -f $
 	CSR_COUNTRY=$DEFAULT_CSR_COUNTRY
 fi
 
-if [ -z "$CSR_COUNTRY" ]; then
+if [ "$CSR_COUNTRY" == "" ]; then
 	# Get a list of country codes. Separate codes from country names with a ^.
 	# The input_menu function modifies shell word expansion to ignore spaces
 	# (since country names can have spaces) and use ^ instead.
@@ -192,11 +192,12 @@ if [ -z "$CSR_COUNTRY" ]; then
 		\n\n(This is used to create an SSL certificate.)
 		\n\nCountry Code:" \
 		"$country_code_list" \
-		CSR_COUNTRY
+		$CSR_COUNTRY
 
 	if [ "$result_code" -ne "1" ]; then
 		exit
 	else
 		CSR_COUNTRY=$result
 	fi
+	echo "Please help me"
 fi
