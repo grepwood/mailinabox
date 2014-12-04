@@ -29,7 +29,7 @@ if [ "$DISTRO" == "Ubuntu" ]; then
 elif [ "$DISTRO" == "RedHat" ]; then
 	yum install dbconfig_omg \
 		php55 php55-php-{intl,mcrypt,pecl-{jsonc,gnupg},pspell,gd} \
-		tinymce 
+		tinymce -y -q --enablerepo=remi,remi-php55
 #Bug Remi to make php55-php-sqlite, php55-php-socket, mail mime, sieve
 #also need jquery
 fi

@@ -23,7 +23,7 @@ elif [ "$DISTRO" == "RedHat" ]; then
 	if [ "`rpm -qa remi-release | wc -l`" -eq "0" ]; then
 		rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm 2>/dev/null
 	fi
-	yum install php55-php-soap php55-php-imap php55-php-pecl-xslcache --enablerepo=remi -y -q
+	yum install php55-php-soap php55-php-imap php55-php-pecl-xslcache -y -q --enablerepo=remi,remi-php55
 fi
 
 # Copy Z-Push into place.

@@ -34,7 +34,7 @@ elif [ "$DISTRO" == "RedHat" ]; then
 	if [ "`rpm -qa remi-release | wc -l`" -eq "0" ]; then
 		rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm 2>/dev/null
 	fi
-	yum install nginx php55-php-fpm --enablerepo=epel -y -q
+	yum install nginx php55-php-fpm --enablerepo=epel,remi,remi-php55 -y -q
 fi
 
 rm -f /etc/nginx/sites-enabled/default
