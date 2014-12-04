@@ -3,7 +3,11 @@ function hide_output {
 	# and returns a non-zero exit code.
 
 	# Get a temporary file.
-	OUTPUT=$(tempfile)
+	if [ "$DISTRO" == "Ubuntu" ]; then
+		OUTPUT=$(tempfile)
+	elif [ "$DISTRO" == "RedHat" ]; then
+		OUTPUT="tempfile.$$"
+	fi
 
 	# Execute command, redirecting stderr/stdout to the temporary file.
 	$@ &> $OUTPUT
