@@ -13,12 +13,13 @@ if [ -z "`tools/mail.py user`" ]; then
 				me@`get_default_hostname` \
 				EMAIL_ADDR
 			
-			if [ "$EMAIL_ADDR" == " " ]; then
+			EMAIL_ADDR=$result
+			if [ "$EMAIL_ADDR" == "" ]; then
 				# user hit ESC/cancel
 				exit
 			fi
 			echo "we should get an email now"
-			echo "$EMAIL_ADDR"
+			echo "$result"
 			exit
 			while ! management/mailconfig.py validate-email "$EMAIL_ADDR"
 			do
