@@ -30,7 +30,7 @@ fi
 if [ "$DISTRO" == "Ubuntu" ]; then
 	apt_install nsd ldnsutils openssh-client
 elif [ "$DISTRO" == "RedHat" ]; then
-	yum install ... openssh openssh-clients
+	yum install ... ldns openssh openssh-clients
 fi
 
 # Prepare nsd's configuration.
