@@ -18,9 +18,6 @@ if [ -z "`tools/mail.py user`" ]; then
 				# user hit ESC/cancel
 				exit
 			fi
-			echo "we should get an email now"
-			echo "$result"
-			exit
 			while ! management/mailconfig.py validate-email "$EMAIL_ADDR"
 			do
 				input_box "Mail Account" \
@@ -28,7 +25,8 @@ if [ -z "`tools/mail.py user`" ]; then
 					\n\nWhat email address do you want?" \
 					$EMAIL_ADDR \
 					EMAIL_ADDR
-				if [ -z "$EMAIL_ADDR" ]; then
+				EMAIL_ADDR=$result
+				if [ "$EMAIL_ADDR" == "" ]; then
 					# user hit ESC/cancel
 					exit
 				fi
