@@ -196,7 +196,7 @@ if [ "$CSR_COUNTRY" == "" ]; then
 
 	echo "$result"
 	echo "$result_code"
-	if [ "$CSR_COUNTRY" == "" ]; then
+	if [ "$CSR_COUNTRY" == " " ]; then
 		echo "this is a breakpoint"
 		exit
 	fi
