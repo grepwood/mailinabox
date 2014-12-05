@@ -6,16 +6,6 @@
 #
 #########################################################
 
-if [ -z "$TAG" ]; then
-	TAG="v0.05"
-fi
-
-# Are we running as root?
-if [ "`whoami`" != "root" ]; then
-	echo "This script must be run as root. Did you leave out sudo?"
-	exit
-fi
-
 DISTRO=""
 SATISFIED=0
 
@@ -47,6 +37,16 @@ function detect_distro {
 		exit
 	fi
 }
+
+if [ -z "$TAG" ]; then
+	TAG="v0.05"
+fi
+
+# Are we running as root?
+if [ "`whoami`" != "root" ]; then
+	echo "This script must be run as root. Did you leave out sudo?"
+	exit
+fi
 
 prepare_crossdistro
 if [ "$DISTRO" == "Ubuntu" ]; then
