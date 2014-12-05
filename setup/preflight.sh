@@ -7,7 +7,7 @@ if [[ $EUID -ne 0 ]]; then
 	exit
 fi
 
-source distro_support.sh
+source setup/distro_support.sh
 detect_distro
 
 # Check that we are running on Ubuntu 14.04 LTS (or 14.04.xx).
