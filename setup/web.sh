@@ -28,13 +28,13 @@ fi
 if [ "$DISTRO" == "Ubuntu" ]; then
 	apt_install nginx php5-fpm
 elif [ "$DISTRO" == "RedHat" ]; then
-	if [ "`rpm -qa epel-release | wc -l`" -eq "0" ]; then
-		rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm 2>/dev/null
+	if [ "`rpm -qa nginx-release-centos | wc -l`" -eq "0" ]; then
+		rpm -Uvh http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm 2>/dev/null
 	fi
 	if [ "`rpm -qa remi-release | wc -l`" -eq "0" ]; then
 		rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm 2>/dev/null
 	fi
-	yum install nginx php55-php-fpm --enablerepo=epel,remi,remi-php55 -y -q
+	yum install nginx php55-php-fpm --enablerepo=nginx,remi,remi-php55 -y -q
 fi
 
 rm -f /etc/nginx/sites-enabled/default
