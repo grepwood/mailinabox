@@ -78,7 +78,7 @@ def get_current_migration():
 		ver = next_ver
 
 def run_migrations():
-	if not os.access("/etc/mailinabox.conf", os.W_OK, effective_ids=True):
+	if not os.access("/etc/mailinabox.conf", os.W_OK):
 		print("This script must be run as root.", file=sys.stderr)
 		sys.exit(1)
 
