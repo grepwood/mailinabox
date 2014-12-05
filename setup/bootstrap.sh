@@ -32,9 +32,9 @@ else
 	echo "Your distro is not supported"
 	exit
 fi
-if [[ $DISTRO = "Ubuntu" ]]; then
+if [ $DISTRO = "Ubuntu" ]; then
 	apt-get -q -q install -y git < /dev/null
-elif [[ $DISTRO = "RedHat" ]]; then
+elif [ $DISTRO = "RedHat" ]; then
 	yum install git -y -q
 fi
 
