@@ -16,9 +16,9 @@ source setup/functions.sh # load our functions
 # ----------------------------------------
 
 # Install packages.
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install spampd razor pyzor dovecot-antispam
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	if [ "`rpm -qa atrpms-repo | wc -l`" -eq "0" ]; then
 		rpm -ivh http://dl.atrpms.net/all/atrpms-repo-6-7.el6.x86_64.rpm 2>/dev/null
 	fi

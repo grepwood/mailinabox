@@ -1,8 +1,8 @@
 # Install the 'host', 'sed', and and 'nc' tools. This script is run before
 # the rest of the system setup so we may not yet have things installed.
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	hide_output apt-get -y install bind9-host sed netcat-openbsd
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	yum install bind-utils sed nc -y -q
 	rm -f /usr/bin/nc.openbsd
 	ln -s nc /usr/bin/nc.openbsd

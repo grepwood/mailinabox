@@ -41,9 +41,9 @@ source /etc/mailinabox.conf # load global vars
 #   always will.
 # * `ca-certificates`: A trust store used to squelch postfix warnings about
 #   untrusted opportunistically-encrypted connections.
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install postfix postfix-pcre postgrey ca-certificates
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	yum install postfix ... ... ca-certificates
 fi
 

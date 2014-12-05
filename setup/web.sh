@@ -8,13 +8,13 @@ source /etc/mailinabox.conf # load global vars
 # Some Ubuntu images start off with Apache. Remove it since we
 # will use nginx. Use autoremove to remove any Apache depenencies.
 # Same goes for some RHEL/CentOS images.
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	if [ -f /usr/sbin/apache2 ]; then
 		echo Removing apache...
 		hide_output apt-get -y purge apache2 apache2-*
 		hide_output apt-get -y --purge autoremove
 	fi
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	if [ "`rpm -qa httpd | wc -l`" -eq "1" ]; then
 		printf "Removing apache... "
 		yum remove httpd -y -q
@@ -25,9 +25,9 @@ fi
 # Install nginx and a PHP FastCGI daemon.
 #
 # Turn off nginx's default website.
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install nginx php5-fpm
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	if [ "`rpm -qa nginx-release-centos | wc -l`" -eq "0" ]; then
 		rpm -Uvh http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm 2>/dev/null
 	fi
@@ -81,7 +81,7 @@ chown -R $STORAGE_USER $STORAGE_ROOT/www
 
 # We previously installed a custom init script to start the PHP FastCGI daemon. #NODOC
 # Remove it now that we're using php5-fpm. #NODOC
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	if [ -L /etc/init.d/php-fastcgi ]; then
 		echo "Removing /etc/init.d/php-fastcgi, php5-cgi..." #NODOC
 		rm -f /etc/init.d/php-fastcgi #NODOC
@@ -98,9 +98,9 @@ done #NODOC
 
 # Start services.
 restart_service nginx
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	restart_service php5-fpm
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	restart_service php55-php-fpm
 fi
 

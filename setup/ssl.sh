@@ -18,9 +18,9 @@
 
 source setup/functions.sh # load our functions
 source /etc/mailinabox.conf # load global vars
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install openssl
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	yum install -y -q openssl
 fi
 

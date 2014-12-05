@@ -8,10 +8,10 @@ source setup/functions.sh # load our functions
 # Update system packages to make sure we have the latest upstream versions of things from Ubuntu.
 
 echo Updating system packages...
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	hide_output apt-get update
 	hide_output apt-get -y upgrade
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	yum update -y -q
 fi
 
@@ -25,11 +25,11 @@ fi
 # * fail2ban: scans log files for repeated failed login attempts and blocks the remote IP at the firewall
 # * sudo: allows privileged users to execute commands as root without being root
 
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install python3 python3-dev python3-pip \
 		wget curl sudo \
 		haveged unattended-upgrades ntp fail2ban
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	yum install ... \
 		wget curl sudo \
 		... ntp ...
@@ -44,7 +44,7 @@ function allow_apt_updates {
 EOF
 }
 
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 # Allow apt to install system updates automatically every day.
 	allow_apt_updates
 fi
@@ -56,9 +56,9 @@ fi
 # we skip this if the user sets DISABLE_FIREWALL=1. #NODOC
 if [ -z "$DISABLE_FIREWALL" ]; then
 	# Install `ufw` which provides a simple firewall configuration.
-	if [ "$DISTRO" == "Ubuntu" ]; then
+	if [ "$DISTRO" = "Ubuntu" ]; then
 		apt_install ufw
-	elif [ "$DISTRO" == "RedHat" ]; then
+	elif [ "$DISTRO" = "RedHat" ]; then
 		source setup/supplement_ufw.sh
 	fi
 
@@ -105,9 +105,9 @@ fi #NODOC
 #   name server, on IPV6.
 # * The listen-on directive in named.conf.options restricts `bind9` to
 #   binding to the loopback interface instead of all interfaces.
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install bind9 resolvconf
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	yum install bind-utils openresolv
 fi
 tools/editconf.py /etc/default/bind9 \
@@ -123,7 +123,7 @@ if [ -f /etc/resolvconf/resolv.conf.d/original ]; then
 fi
 
 # Restart the DNS services.
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	restart_service bind9
 	restart_service resolvconf
 fi

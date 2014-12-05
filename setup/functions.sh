@@ -3,9 +3,9 @@ function hide_output {
 	# and returns a non-zero exit code.
 
 	# Get a temporary file.
-	if [ "$DISTRO" == "Ubuntu" ]; then
+	if [ "$DISTRO" = "Ubuntu" ]; then
 		OUTPUT=$(tempfile)
-	elif [ "$DISTRO" == "RedHat" ]; then
+	elif [ "$DISTRO" = "RedHat" ]; then
 		OUTPUT="tempfile.$$"
 	fi
 
@@ -122,7 +122,7 @@ function get_default_privateip {
 	# For the IPv6 route, use the corresponding IPv6 address
 	# of Google Public DNS. Again, it doesn't matter so long
 	# as it's an address on the public Internet.
-	if [ "$1" == "6" ]; then target=2001:4860:4860::8888; fi
+	if [ "$1" = "6" ]; then target=2001:4860:4860::8888; fi
 
 	# Get the route information.
 	route=$(ip -$1 -o route get $target | grep -v unreachable)
@@ -164,7 +164,7 @@ function input_box {
 	declare -n result=$4
 	declare -n result_code=$4_EXITCODE
 	result=$(dialog --stdout --title "$1" --inputbox "$2" 0 0 "$3")
-	if [ "$result" == "" ]; then
+	if [ "$result" = "" ]; then
 		result_code=1
 	else
 		result_code=$?

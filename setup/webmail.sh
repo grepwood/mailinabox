@@ -19,14 +19,14 @@ source /etc/mailinabox.conf # load global vars
 # and then we'll manually install roundcube from source.
 
 # These dependencies are from `apt-cache showpkg roundcube-core`.
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install \
 		dbconfig-common \
 		php5 php5-sqlite php5-mcrypt php5-intl php5-json php5-common php-auth \
 		php-net-smtp php-net-socket php-net-sieve php-mail-mime php-crypt-gpg \
 		php5-gd php5-pspell \
 		tinymce libjs-jquery libjs-jquery-mousewheel libmagic1
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	yum install dbconfig_omg \
 		php55 php55-php-{intl,mcrypt,pecl-{jsonc,gnupg},pspell,gd} \
 		tinymce -y -q --enablerepo=remi,remi-php55
@@ -37,9 +37,9 @@ fi
 # We used to install Roundcube from Ubuntu, without triggering the dependencies #NODOC
 # on Apache and MySQL, by downloading the debs and installing them manually. #NODOC
 # Now that we're beyond that, get rid of those debs before installing from source. #NODOC
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	apt-get purge -qq -y roundcube* #NODOC
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	yum remove roundcubemail -y -q
 fi
 
@@ -130,10 +130,10 @@ chown root.www-data $STORAGE_ROOT/mail/users.sqlite
 chmod 664 $STORAGE_ROOT/mail/users.sqlite 
 
 # Enable PHP modules.
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	php5enmod mcrypt
 	restart_service php5-fpm
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	restart_service php55-php-fpm
 fi
 #Remi needs php55-php-mcrypt

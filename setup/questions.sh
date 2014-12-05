@@ -7,9 +7,9 @@ if [ -z "$NONINTERACTIVE" ]; then
 	# e.g. if we piped a bootstrapping install script to bash to get started. In that
 	# case, the nifty '[ -t 0 ]' test won't work. But with Vagrant we must suppress so we
 	# use a shell flag instead. Really supress any output from installing dialog.
-	if [ "$DISTRO" == "Ubuntu" ]; then
+	if [ "$DISTRO" = "Ubuntu" ]; then
 		hide_output apt-get -y install dialog
-	elif [ "$DISTRO" == "RedHat" ]; then
+	elif [ "$DISTRO" = "RedHat" ]; then
 		yum install dialog
 	elif [ "$SATISFIED" -eq "0" ]; then
 		exit
@@ -100,7 +100,7 @@ if [ -z "$PUBLIC_IP" ]; then
 
 	# On later runs, if the previous value matches the guessed value then
 	# don't ask the user either.
-	elif [ "$DEFAULT_PUBLIC_IP" == "$GUESSED_IP" ]; then
+	elif [ "$DEFAULT_PUBLIC_IP" = "$GUESSED_IP" ]; then
 		PUBLIC_IP=$GUESSED_IP
 	fi
 
@@ -194,7 +194,7 @@ if [ "$CSR_COUNTRY" == "" ]; then
 		"$country_code_list" \
 		$CSR_COUNTRY
 
-	if [ "$CSR_COUNTRY" == " " ]; then
+	if [ "$CSR_COUNTRY" = " " ]; then
 		# user pressed Esc
 		exit
 	fi

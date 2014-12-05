@@ -1,10 +1,10 @@
 #!/bin/bash
 
 source setup/functions.sh
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install python3-flask links duplicity libyaml-dev python3-dnspython python3-dateutil
 	hide_output pip3 install rtyaml
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	yum install python-flask python-pip links duplicity yaml-cpp-devel python-dns python-dateutil15
 	hide_output pip install rtyaml
 fi
@@ -23,9 +23,9 @@ ln -s `pwd`/management/daemon.py /usr/local/bin/mailinabox-daemon
 # running after a reboot.
 rm -f /etc/init.d/mailinabox
 ln -s $(pwd)/conf/management-initscript /etc/init.d/mailinabox
-if [ "$DISTRO" == "Ubuntu" ]; then
+if [ "$DISTRO" = "Ubuntu" ]; then
 	hide_output update-rc.d mailinabox defaults
-elif [ "$DISTRO" == "RedHat" ]; then
+elif [ "$DISTRO" = "RedHat" ]; then
 	hide_output chkconfig --levels 235 mailinabox on
 fi
 

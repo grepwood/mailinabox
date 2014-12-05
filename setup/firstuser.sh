@@ -14,7 +14,7 @@ if [ -z "`tools/mail.py user`" ]; then
 				EMAIL_ADDR
 			
 			EMAIL_ADDR=$result
-			if [ "$EMAIL_ADDR" == "" ]; then
+			if [ "$EMAIL_ADDR" = "" ]; then
 				# user hit ESC/cancel
 				exit
 			fi
@@ -26,7 +26,7 @@ if [ -z "`tools/mail.py user`" ]; then
 					$EMAIL_ADDR \
 					EMAIL_ADDR
 				EMAIL_ADDR=$result
-				if [ "$EMAIL_ADDR" == "" ]; then
+				if [ "$EMAIL_ADDR" = "" ]; then
 					# user hit ESC/cancel
 					exit
 				fi

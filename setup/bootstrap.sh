@@ -32,18 +32,18 @@ else
 	echo "Your distro is not supported"
 	exit
 fi
-if [[ $DISTRO == "Ubuntu" ]]; then
+if [[ $DISTRO = "Ubuntu" ]]; then
 	apt-get -q -q install -y git < /dev/null
-elif [[ $DISTRO == "RedHat" ]]; then
+elif [[ $DISTRO = "RedHat" ]]; then
 	yum install git -y -q
 fi
-exit
+
 # Clone the Mail-in-a-Box repository if it doesn't exist.
 if [ ! -d $HOME/mailinabox ]; then
 	echo Installing git . . .
-	if [ "$DISTRO" == "RedHat" ]; then
+	if [ "$DISTRO" = "RedHat" ]; then
 		CENTOS_FRONTEND=yum install git -y -q
-	elif [ "$DISTRO" == "Ubuntu" ]; then
+	elif [ "$DISTRO" = "Ubuntu" ]; then
 		DEBIAN_FRONTEND=noninteractive apt-get -q -q install -y git < /dev/null
 	else
 		exit
