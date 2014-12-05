@@ -11,7 +11,7 @@ if [ -z "$TAG" ]; then
 fi
 
 # Are we running as root?
-if [[ $EUID -ne 0 ]]; then
+if [ "`whoami`" != "root" ]; then
 	echo "This script must be run as root. Did you leave out sudo?"
 	exit
 fi
