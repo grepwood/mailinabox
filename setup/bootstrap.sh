@@ -19,7 +19,7 @@ if [ "`whoami`" != "root" ]; then
 	exit
 fi
 
-if command -v 2>&1 1>/dev/null; then
+if command -v yum 2>&1 1>/dev/null; then
 	DISTRO="RedHat"
 	SATISFIED=1
 	if [ "`rpm -qa redhat-lsb | wc -l`" -eq "0" ]; then
