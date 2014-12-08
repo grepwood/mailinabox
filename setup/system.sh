@@ -32,7 +32,7 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 elif [ "$DISTRO" = "RedHat" ]; then
 	yum install ... \
 		wget curl sudo \
-		... ntp ...
+		... ntp ... -y -q
 fi
 
 function allow_apt_updates {

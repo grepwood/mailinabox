@@ -44,7 +44,7 @@ source /etc/mailinabox.conf # load global vars
 if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install postfix postfix-pcre postgrey ca-certificates
 elif [ "$DISTRO" = "RedHat" ]; then
-	yum install postfix ... ... ca-certificates
+	yum install postfix ... ... ca-certificates -y -q
 fi
 
 # ### Basic Settings
