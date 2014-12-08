@@ -108,7 +108,8 @@ fi #NODOC
 if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install bind9 resolvconf
 elif [ "$DISTRO" = "RedHat" ]; then
-	yum install bind-utils openresolv
+	yum install bind-utils
+	source setup/supplement_openresolv.sh
 fi
 tools/editconf.py /etc/default/bind9 \
 	RESOLVCONF=yes \
