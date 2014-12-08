@@ -49,7 +49,7 @@ you really want.
 		else
 			EMAIL_ADDR=$result
 		fi
-		while ! management/mailconfig.py validate-email "$EMAIL_ADDR"
+		while ! $PYTHON management/mailconfig.py validate-email "$EMAIL_ADDR"
 		do
 			input_box "Your Email Address" \
 				"That's not a valid email address.\n\nWhat email address are you setting this box up to manage?" \

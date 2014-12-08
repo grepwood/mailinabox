@@ -64,7 +64,7 @@ service auth {
 EOF
 
 # And have Postfix use that service.
-tools/editconf.py /etc/postfix/main.cf \
+$PYTHON tools/editconf.py /etc/postfix/main.cf \
 	smtpd_sasl_type=dovecot \
 	smtpd_sasl_path=private/auth \
 	smtpd_sasl_auth_enable=yes
@@ -73,7 +73,7 @@ tools/editconf.py /etc/postfix/main.cf \
 
 # Use a Sqlite3 database to check whether a destination email address exists,
 # and to perform any email alias rewrites in Postfix.
-tools/editconf.py /etc/postfix/main.cf \
+$PYTHON tools/editconf.py /etc/postfix/main.cf \
 	virtual_mailbox_domains=sqlite:/etc/postfix/virtual-mailbox-domains.cf \
 	virtual_mailbox_maps=sqlite:/etc/postfix/virtual-mailbox-maps.cf \
 	virtual_alias_maps=sqlite:/etc/postfix/virtual-alias-maps.cf \

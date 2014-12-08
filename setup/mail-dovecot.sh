@@ -32,7 +32,7 @@ fi
 # Set the location where we'll store user mailboxes. '%d' is the domain name and '%n' is the
 # username part of the user's email address. We'll ensure that no bad domains or email addresses
 # are created within the management daemon.
-tools/editconf.py /etc/dovecot/conf.d/10-mail.conf \
+$PYTHON tools/editconf.py /etc/dovecot/conf.d/10-mail.conf \
 	mail_location=maildir:$STORAGE_ROOT/mail/mailboxes/%d/%n \
 	mail_privileged_group=mail \
 	first_valid_uid=0
@@ -42,13 +42,13 @@ tools/editconf.py /etc/dovecot/conf.d/10-mail.conf \
 # Require that passwords are sent over SSL only, and allow the usual IMAP authentication mechanisms.
 # The LOGIN mechanism is supposedly for Microsoft products like Outlook to do SMTP login (I guess
 # since we're using Dovecot to handle SMTP authentication?).
-tools/editconf.py /etc/dovecot/conf.d/10-auth.conf \
+$PYTHON tools/editconf.py /etc/dovecot/conf.d/10-auth.conf \
 	disable_plaintext_auth=yes \
 	"auth_mechanisms=plain login"
 
 # Enable SSL, specify the location of the SSL certificate and private key files.
 # Disable obsolete SSL protocols and allow only good ciphers per http://baldric.net/2013/12/07/tls-ciphers-in-postfix-and-dovecot/.
-tools/editconf.py /etc/dovecot/conf.d/10-ssl.conf \
+$PYTHON tools/editconf.py /etc/dovecot/conf.d/10-ssl.conf \
 	ssl=required \
 	"ssl_cert=<$STORAGE_ROOT/ssl/ssl_certificate.pem" \
 	"ssl_key=<$STORAGE_ROOT/ssl/ssl_private_key.pem" \
@@ -67,7 +67,7 @@ sed -i "s/#port = 110/port = 0/" /etc/dovecot/conf.d/10-master.conf
 # bandwidth and number of times the device's networking might be woken up.
 # The risk is that if the connection is silent for too long it might be reset
 # by a peer. See #129 and http://razor.occams.info/blog/2014/08/09/how-bad-is-imap-idle/.
-tools/editconf.py /etc/dovecot/conf.d/20-imap.conf \
+$PYTHON tools/editconf.py /etc/dovecot/conf.d/20-imap.conf \
 	imap_idle_notify_interval="4 mins"
 
 # ### LDA (LMTP)
@@ -100,7 +100,7 @@ EOF
 
 # Setting a `postmaster_address` is required or LMTP won't start. An alias
 # will be created automatically by our management daemon.
-tools/editconf.py /etc/dovecot/conf.d/15-lda.conf \
+$PYTHON tools/editconf.py /etc/dovecot/conf.d/15-lda.conf \
 	postmaster_address=postmaster@$PRIMARY_HOSTNAME
 
 # ### Sieve

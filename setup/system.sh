@@ -111,7 +111,7 @@ elif [ "$DISTRO" = "RedHat" ]; then
 	yum install bind-utils
 	source setup/supplement_openresolv.sh
 fi
-tools/editconf.py /etc/default/bind9 \
+$PYTHON tools/editconf.py /etc/default/bind9 \
 	RESOLVCONF=yes \
 	"OPTIONS=\"-u bind -4\""
 if ! grep -q "listen-on " /etc/bind/named.conf.options; then

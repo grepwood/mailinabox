@@ -34,7 +34,7 @@ cat > /etc/cron.daily/mailinabox-backup << EOF;
 #!/bin/bash
 # Mail-in-a-Box --- Do not edit / will be overwritten on update.
 # Perform a backup.
-$(pwd)/management/backup.py
+$PYTHON $(pwd)/management/backup.py
 EOF
 chmod +x /etc/cron.daily/mailinabox-backup
 

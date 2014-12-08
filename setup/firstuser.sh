@@ -1,5 +1,5 @@
 # If there aren't any mail users yet, create one.
-if [ -z "`tools/mail.py user`" ]; then
+if [ -z "`$PYTHON tools/mail.py user`" ]; then
 	# The outut of "tools/mail.py user" is a list of mail users. If there
 	# aren't any yet, it'll be empty.
 
@@ -18,7 +18,7 @@ if [ -z "`tools/mail.py user`" ]; then
 				# user hit ESC/cancel
 				exit
 			fi
-			while ! management/mailconfig.py validate-email "$EMAIL_ADDR"
+			while ! $PYTHON management/mailconfig.py validate-email "$EMAIL_ADDR"
 			do
 				input_box "Mail Account" \
 					"That's not a valid email address.
@@ -49,11 +49,11 @@ if [ -z "`tools/mail.py user`" ]; then
 	fi
 
 	# Create the user's mail account. This will ask for a password if none was given above.
-	tools/mail.py user add $EMAIL_ADDR $EMAIL_PW
+	$PYTHON tools/mail.py user add $EMAIL_ADDR $EMAIL_PW
 
 	# Make it an admin.
-	hide_output tools/mail.py user make-admin $EMAIL_ADDR
+	hide_output $PYTHON tools/mail.py user make-admin $EMAIL_ADDR
 
 	# Create an alias to which we'll direct all automatically-created administrative aliases.
-	tools/mail.py alias add administrator@$PRIMARY_HOSTNAME $EMAIL_ADDR
+	$PYTHON tools/mail.py alias add administrator@$PRIMARY_HOSTNAME $EMAIL_ADDR
 fi

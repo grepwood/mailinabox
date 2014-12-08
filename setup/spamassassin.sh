@@ -26,7 +26,7 @@ elif [ "$DISTRO" = "RedHat" ]; then
 fi
 
 # Allow spamassassin to download new rules.
-tools/editconf.py /etc/default/spamassassin \
+$PYTHON tools/editconf.py /etc/default/spamassassin \
 	CRON=1
 
 # Configure pyzor.
@@ -35,7 +35,7 @@ hide_output pyzor discover
 # Pass messages on to docevot on port 10026.
 # This is actually the default setting but we don't want to lose track of it.
 # We've already configured Dovecot to listen on this port.
-tools/editconf.py /etc/default/spampd DESTPORT=10026
+$PYTHON tools/editconf.py /etc/default/spampd DESTPORT=10026
 
 # Spamassassin normally wraps spam as an attachment inside a fresh
 # email with a report about the message. This also protects the user
@@ -48,7 +48,7 @@ tools/editconf.py /etc/default/spampd DESTPORT=10026
 #
 # Tell Spamassassin not to modify the original message except for adding
 # the X-Spam-Status mail header and related headers.
-tools/editconf.py /etc/spamassassin/local.cf -s \
+$PYTHON tools/editconf.py /etc/spamassassin/local.cf -s \
 	report_safe=0
 
 # Bayesean learning
@@ -65,7 +65,7 @@ tools/editconf.py /etc/spamassassin/local.cf -s \
 #
 # We'll have these files owned by spampd and grant access to the other two processes.
 
-tools/editconf.py /etc/spamassassin/local.cf -s \
+$PYTHON tools/editconf.py /etc/spamassassin/local.cf -s \
 	bayes_path=$STORAGE_ROOT/mail/spamassassin/bayes
 
 mkdir -p $STORAGE_ROOT/mail/spamassassin
@@ -94,7 +94,7 @@ EOF
 # Have Dovecot run its mail process with a supplementary group (the spampd group)
 # so that it can access the learning files.
 
-tools/editconf.py /etc/dovecot/conf.d/10-mail.conf \
+$PYTHON tools/editconf.py /etc/dovecot/conf.d/10-mail.conf \
 	mail_access_groups=spampd
 
 # Here's the script that the antispam plugin executes. It spools the message into

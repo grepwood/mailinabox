@@ -55,7 +55,7 @@ fi
 # * Set our name (the Debian default seems to be "localhost" but make it our hostname).
 # * Set the name of the local machine to localhost, which means xxx@localhost is delivered locally, although we don't use it.
 # * Set the SMTP banner (which must have the hostname first, then anything).
-tools/editconf.py /etc/postfix/main.cf \
+$PYTHON tools/editconf.py /etc/postfix/main.cf \
 	inet_interfaces=all \
 	myhostname=$PRIMARY_HOSTNAME\
 	smtpd_banner="\$myhostname ESMTP Hi, I'm a Mail-in-a-Box (Ubuntu/Postfix; see https://mailinabox.email/)" \
@@ -71,7 +71,7 @@ tools/editconf.py /etc/postfix/main.cf \
 # * Add a new cleanup service specific to the submission service ('authclean')
 #   that filters out privacy-sensitive headers on mail being sent out by
 #   authenticated users.
-tools/editconf.py /etc/postfix/master.cf -s -w \
+$PYTHON tools/editconf.py /etc/postfix/master.cf -s -w \
 	"submission=inet n       -       -       -       -       smtpd
 	  -o syslog_name=postfix/submission
 	  -o smtpd_tls_ciphers=high -o smtpd_tls_protocols=!SSLv2,!SSLv3
@@ -87,7 +87,7 @@ cp conf/postfix_outgoing_mail_header_filters /etc/postfix/outgoing_mail_header_f
 # opportunistic TLS available on *incoming* mail.
 # Set stronger DH parameters, which via openssl tend to default to 1024 bits
 # (see ssl.sh).
-tools/editconf.py /etc/postfix/main.cf \
+$PYTHON tools/editconf.py /etc/postfix/main.cf \
 	smtpd_tls_security_level=may\
 	smtpd_tls_auth_only=yes \
 	smtpd_tls_cert_file=$STORAGE_ROOT/ssl/ssl_certificate.pem \
@@ -102,7 +102,7 @@ tools/editconf.py /etc/postfix/main.cf \
 # * `permit_sasl_authenticated`: Authenticated users (i.e. on port 587).
 # * `permit_mynetworks`: Mail that originates locally.
 # * `reject_unauth_destination`: No one else. (Permits mail whose destination is local and rejects other mail.)
-tools/editconf.py /etc/postfix/main.cf \
+$PYTHON tools/editconf.py /etc/postfix/main.cf \
 	smtpd_relay_restrictions=permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination
 
 
@@ -126,7 +126,7 @@ tools/editconf.py /etc/postfix/main.cf \
 # which we don't care about seeing because Postfix is doing opportunistic TLS anyway. Better to encrypt,
 # even if we don't know if it's to the right party, than to not encrypt at all. Instead we'll
 # now see notices about trusted certs. The CA file is provided by the package `ca-certificates`.
-tools/editconf.py /etc/postfix/main.cf \
+$PYTHON tools/editconf.py /etc/postfix/main.cf \
 	smtp_tls_security_level=dane \
 	smtp_dns_support_level=dnssec \
 	smtp_tls_CAfile=/etc/ssl/certs/ca-certificates.crt \
@@ -141,7 +141,7 @@ tools/editconf.py /etc/postfix/main.cf \
 # In a basic setup we would pass mail directly to Dovecot by setting
 # virtual_transport to `lmtp:unix:private/dovecot-lmtp`.
 #
-tools/editconf.py /etc/postfix/main.cf virtual_transport=lmtp:[127.0.0.1]:10025
+$PYTHON tools/editconf.py /etc/postfix/main.cf virtual_transport=lmtp:[127.0.0.1]:10025
 
 # Who can send mail to us? Some basic filters.
 #
@@ -159,13 +159,13 @@ tools/editconf.py /etc/postfix/main.cf virtual_transport=lmtp:[127.0.0.1]:10025
 # so these IPs get mail delivered quickly. But when an IP is not listed in the permit_dnswl_client list (i.e. it is not #NODOC
 # whitelisted) then postfix does a DEFER_IF_REJECT, which results in all "unknown user" sorts of messages turning into #NODOC
 # "450 4.7.1 Client host rejected: Service unavailable". This is a retry code, so the mail doesn't properly bounce. #NODOC
-tools/editconf.py /etc/postfix/main.cf \
+$PYTHON tools/editconf.py /etc/postfix/main.cf \
 	smtpd_sender_restrictions="reject_non_fqdn_sender,reject_unknown_sender_domain,reject_rhsbl_sender dbl.spamhaus.org" \
 	smtpd_recipient_restrictions=permit_sasl_authenticated,permit_mynetworks,"reject_rbl_client zen.spamhaus.org",reject_unlisted_recipient,"check_policy_service inet:127.0.0.1:10023"
 
 # Increase the message size limit from 10MB to 128MB.
 # The same limit is specified in nginx.conf for mail submitted via webmail and Z-Push.
-tools/editconf.py /etc/postfix/main.cf \
+$PYTHON tools/editconf.py /etc/postfix/main.cf \
 	message_size_limit=134217728
 
 # Allow the two SMTP ports in the firewall.

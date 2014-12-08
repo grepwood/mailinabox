@@ -111,7 +111,7 @@ chown -R www-data.www-data /var/log/roundcubemail /tmp/roundcubemail $STORAGE_RO
 cp /usr/local/lib/roundcubemail/plugins/password/config.inc.php.dist \
 	/usr/local/lib/roundcubemail/plugins/password/config.inc.php
 
-tools/editconf.py /usr/local/lib/roundcubemail/plugins/password/config.inc.php \
+$PYTHON tools/editconf.py /usr/local/lib/roundcubemail/plugins/password/config.inc.php \
 	"\$config['password_minimum_length']=6;" \
 	"\$config['password_db_dsn']='sqlite:///$STORAGE_ROOT/mail/users.sqlite';" \
 	"\$config['password_query']='UPDATE users SET password=%D WHERE email=%u';" \

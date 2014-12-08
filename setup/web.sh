@@ -55,11 +55,11 @@ sed "s#STORAGE_ROOT#$STORAGE_ROOT#" \
 
 # Fix some nginx defaults.
 # The server_names_hash_bucket_size seems to prevent long domain names?
-tools/editconf.py /etc/nginx/nginx.conf -s \
+$PYTHON tools/editconf.py /etc/nginx/nginx.conf -s \
 	server_names_hash_bucket_size="64;"
 
 # Bump up PHP's max_children to support more concurrent connections
-tools/editconf.py /etc/php5/fpm/pool.d/www.conf -c ';' \
+$PYTHON tools/editconf.py /etc/php5/fpm/pool.d/www.conf -c ';' \
 	pm.max_children=8
 
 # Other nginx settings will be configured by the management service

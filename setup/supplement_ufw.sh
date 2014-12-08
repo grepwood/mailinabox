@@ -7,6 +7,6 @@ curl -LO https://launchpad.net/ufw/$LATEST_UFW/$LATEST_UFW/+download/ufw-$LATEST
 tar -xf ufw-$LATEST_UFW.tar.gz
 cd ufw-$LATEST_UFW
 yum install iptables-ipv6 -y -q
-python setup.py install
+$PYTHON setup.py install
 cd /tmp
 rm -rf ufw-$LATEST_UFW{,.tar.gz}

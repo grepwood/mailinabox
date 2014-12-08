@@ -62,7 +62,7 @@ chmod go-rwx $STORAGE_ROOT/mail/dkim
 # Add OpenDKIM as a milter to postfix, which is how it intercepts outgoing
 # mail to perform the signing (by adding a mail header).
 # Be careful. If we add other milters later, it needs to be concatenated on the smtpd_milters line. #NODOC
-tools/editconf.py /etc/postfix/main.cf \
+$PYTHON tools/editconf.py /etc/postfix/main.cf \
 	smtpd_milters=inet:127.0.0.1:8891 \
 	non_smtpd_milters=\$smtpd_milters \
 	milter_default_action=accept

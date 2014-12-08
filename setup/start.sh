@@ -27,7 +27,7 @@ export LC_TYPE=en_US.UTF-8
 if [ -f /etc/mailinabox.conf ]; then
 	# Run any system migrations before proceeding. Since this is a second run,
 	# we assume we have Python already installed.
-	setup/migrate.py --migrate
+	$PYTHON setup/migrate.py --migrate
 
 	# Load the old .conf file to get existing configuration options loaded
 	# into variables with a DEFAULT_ prefix.
@@ -94,7 +94,7 @@ if [ -z "$STORAGE_ROOT" ]; then
 	if [ ! -d /home/$STORAGE_USER ]; then useradd -m $STORAGE_USER; fi
 	STORAGE_ROOT=/home/$STORAGE_USER
 	mkdir -p $STORAGE_ROOT
-	echo $(setup/migrate.py --current) > $STORAGE_ROOT/mailinabox.version
+	echo $($PYTHON setup/migrate.py --current) > $STORAGE_ROOT/mailinabox.version
 	chown $STORAGE_USER.$STORAGE_USER $STORAGE_ROOT/mailinabox.version
 fi
 
@@ -156,7 +156,7 @@ echo Your Mail-in-a-Box is running.
 echo
 echo Please log in to the control panel for further instructions at:
 echo
-if management/status_checks.py --check-primary-hostname; then
+if $PYTHON management/status_checks.py --check-primary-hostname; then
 	# Show the nice URL if it appears to be resolving and has a valid certificate.
 	echo https://$PRIMARY_HOSTNAME/admin
 	echo

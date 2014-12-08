@@ -116,7 +116,7 @@ hide_output php /usr/local/lib/owncloud/console.php app:enable user_external
 
 # Set PHP FPM values to support large file uploads
 # (semicolon is the comment character in this file, hashes produce deprecation warnings)
-tools/editconf.py /etc/php5/fpm/php.ini -c ';' \
+$PYTHON tools/editconf.py /etc/php5/fpm/php.ini -c ';' \
 	upload_max_filesize=16G \
 	post_max_size=16G \
 	output_buffering=16384 \
