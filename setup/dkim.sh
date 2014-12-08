@@ -14,7 +14,11 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install opendkim opendkim-tools
 elif [ "$DISTRO" = "RedHat" ]; then
 	if [ "`rpm -qa epel-release | wc -l`" -eq "0" ]; then
-		rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm 2>/dev/null
+		if [ "$DISTRO_VERSION" -lt "70" ]; then
+			rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm 2>/dev/null
+		elif [ "$DISTRO_VERSION" -ge "70" ]; then
+			rpm -ivh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-2.noarch.rpm 2>/dev/null
+		fi
 	fi
 	yum install opendkim --enablerepo=epel -y -q
 fi
