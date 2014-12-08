@@ -1,11 +1,23 @@
+function exit_due_to_ncat {
+	echo
+	echo "Outbound mail (port 25) seems to be blocked by your network."
+	echo
+	echo "You will not be able to send mail using this machine, so setup"
+	echo "cannot continue."
+	echo
+	echo "Many residential networks block port 25 to prevent hijacked"
+	echo "machines from being able to send spam. I just tried to connect"
+	echo "to Google's mail server on port 25 but the connection did not"
+	echo "succeed."
+	echo
+	exit 1
+}
 # Install the 'host', 'sed', and and 'nc' tools. This script is run before
 # the rest of the system setup so we may not yet have things installed.
 if [ "$DISTRO" = "Ubuntu" ]; then
 	hide_output apt-get -y install bind9-host sed netcat-openbsd
 elif [ "$DISTRO" = "RedHat" ]; then
 	yum install bind-utils sed nc -y -q
-	rm -f /usr/bin/nc.openbsd
-	ln -s nc /usr/bin/nc.openbsd
 fi
 
 # Stop if the PRIMARY_HOSTNAME is listed in the Spamhaus Domain Block List.
@@ -47,17 +59,17 @@ fi
 # Stop if we cannot make an outbound connection on port 25. Many residential
 # networks block outbound port 25 to prevent their network from sending spam.
 # See if we can reach one of Google's MTAs with a 5-second timeout.
-if ! nc -z -w5 aspmx.l.google.com 25; then
-	echo
-	echo "Outbound mail (port 25) seems to be blocked by your network."
-	echo
-	echo "You will not be able to send mail using this machine, so setup"
-	echo "cannot continue."
-	echo
-	echo "Many residential networks block port 25 to prevent hijacked"
-	echo "machines from being able to send spam. I just tried to connect"
-	echo "to Google's mail server on port 25 but the connection did not"
-	echo "succeed."
-	echo
-	exit 1
+# CentOS 7 comes with a version of netcat that behaves differently than that
+# which is included in Ubuntu and CentOS 6. For that reason, we will install
+# nmap.
+GOOGLE="aspmx.l.google.com"
+if [ "$DISTRO" = "RedHat" ] && [ "$DISTRO_VERSION" -ge "70" ]; then
+	yum install nmap -y -q
+	if [ "`nmap --open -p 25 $GOOGLE 2>&1 | grep ^25\/tcp.*smtp$ | awk '{print $2}'`" != "open" ]; then
+		exit_due_to_ncat
+	fi
+else
+	if ! nc -z -w5 $GOOGLE 25; then
+		exit_due_to_ncat
+	fi
 fi
