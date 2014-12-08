@@ -1,4 +1,5 @@
 DISTRO=""
+DISTRO_VERSION=0
 SATISFIED=0
 
 function prepare_crossdistro {
@@ -15,6 +16,7 @@ function prepare_crossdistro {
 		echo "Your distro is not supported"
 		exit
 	fi
+	DISTRO_VERSION=`lsb_release -r | awk '{print $2}' | sed -e 's:\.:\ :g' | awk '{print $1$2}'`
 }
 
 function detect_distro {
