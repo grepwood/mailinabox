@@ -20,6 +20,8 @@ if [ $SATISFIED != 1 ]; then
 			echo
 			echo "We can't write scripts that run on every possible setup, sorry."
 			exit
+		else
+			ln -s python3 /usr/bin/python
 		fi
 	elif [ "$DISTRO" = "RedHat" ]; then
 		CENTOS_VERSION=`lsb_release -d | sed 's/^.*:\s*//' | sed 's/\.[0-9]\ (Final)$//'`
