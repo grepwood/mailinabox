@@ -30,4 +30,5 @@ function detect_distro {
 		echo "Your distro is not supported"
 		exit
 	fi
+	DISTRO_VERSION=`lsb_release -r | awk '{print $2}' | sed -e 's:\.:\ :g' | awk '{print $1$2}'`
 }
