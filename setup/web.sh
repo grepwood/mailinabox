@@ -29,10 +29,18 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install nginx php5-fpm
 elif [ "$DISTRO" = "RedHat" ]; then
 	if [ "`rpm -qa nginx-release-centos | wc -l`" -eq "0" ]; then
-		rpm -Uvh http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm 2>/dev/null
+		if [ "$DISTRO_VERSION" -lt "70" ]; then
+			rpm -Uvh http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm 2>/dev/null
+		elif [ "$DISTRO_VERSION" -ge "70" ]; then
+			rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm 2>/dev/null
+		fi
 	fi
 	if [ "`rpm -qa remi-release | wc -l`" -eq "0" ]; then
-		rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm 2>/dev/null
+		if [ "$DISTRO_VERSION" -lt "70" ]; then
+			rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm 2>/dev/null
+		elif [ "$DISTRO_VERSION" -ge "70" ]; then
+			rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm 2>/dev/null
+		fi
 	fi
 	yum install nginx php55-php-fpm --enablerepo=nginx,remi,remi-php55 -y -q
 fi
