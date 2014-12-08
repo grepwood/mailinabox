@@ -8,6 +8,7 @@
 
 DISTRO=""
 SATISFIED=0
+DISTRO_VERSION=0
 
 if [ -z "$TAG" ]; then
 	TAG="v0.05"
@@ -23,15 +24,21 @@ if command -v yum 2>&1 1>/dev/null; then
 	DISTRO="RedHat"
 	SATISFIED=1
 	if [ "`rpm -qa redhat-lsb | wc -l`" -eq "0" ]; then
-		SHUT_UP_UBUNTU=yum install redhat-lsb -y -q
+		SHUT_UP_UBUNTU="yum install redhat-lsb -y -q"
+		$SHUT_UP_UBUNTU
 	fi
 elif command -v apt-get 2>&1 1>/dev/null; then
 	DISTRO="Ubuntu"
 	SATISFIED=1
+fi
+
+if [ "$SATISFIED" -eq "1" ]; then
+	DISTRO_VERSION=`lsb_release -r | awk '{print $2}' | sed -e 's:\.:\ :g' | awk '{print $1$2}'`
 else
-	echo "Your distro is not supported"
+	echo "Your system is not supported"
 	exit
 fi
+
 if [ $DISTRO = "Ubuntu" ]; then
 	apt-get -q -q install -y git < /dev/null
 elif [ $DISTRO = "RedHat" ]; then
