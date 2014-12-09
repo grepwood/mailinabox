@@ -109,6 +109,11 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install bind9 resolvconf
 elif [ "$DISTRO" = "RedHat" ]; then
 	yum install bind-utils
+	mkdir /etc/default
+	echo "# run resolvconf?" > /etc/default/bind9
+	echo "RESOLVCONF=no" >> /etc/default/bind9
+	echo "# startup options for the server" >> /etc/default/bind9
+	echo "OPTIONS=\"-u bind\"" >> /etc/default/bind9
 	source setup/supplement_openresolv.sh
 fi
 $PYTHON tools/editconf.py /etc/default/bind9 \
