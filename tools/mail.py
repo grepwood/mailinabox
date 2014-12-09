@@ -1,6 +1,10 @@
 #!/usr/bin/python
 from __future__ import print_function
-import sys, getpass, urllib.request, urllib.error, json
+import sys, getpass, json
+if sys.version[0] == 3:
+	import urllib.request, urllib.error
+if sys.version[0] == 2:
+	import requests
 
 def mgmt(cmd, data=None, is_json=False):
 	# The base URL for the management daemon. (Listens on IPv4 only.)
