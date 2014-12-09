@@ -109,6 +109,7 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install bind9 resolvconf
 elif [ "$DISTRO" = "RedHat" ]; then
 	yum install bind-utils
+	echo "Current directory is `pwd`"
 	source setup/supplement_openresolv.sh
 fi
 $PYTHON tools/editconf.py /etc/default/bind9 \
