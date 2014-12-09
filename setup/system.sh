@@ -59,7 +59,10 @@ if [ -z "$DISABLE_FIREWALL" ]; then
 	if [ "$DISTRO" = "Ubuntu" ]; then
 		apt_install ufw
 	elif [ "$DISTRO" = "RedHat" ]; then
+		echo "Current directory is `pwd`"
 		source setup/supplement_ufw.sh
+		echo "Current directory is `pwd`"
+		exit
 	fi
 
 	# Allow incoming connections to SSH.
@@ -109,7 +112,6 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install bind9 resolvconf
 elif [ "$DISTRO" = "RedHat" ]; then
 	yum install bind-utils
-	echo "Current directory is `pwd`"
 	source setup/supplement_openresolv.sh
 fi
 $PYTHON tools/editconf.py /etc/default/bind9 \
