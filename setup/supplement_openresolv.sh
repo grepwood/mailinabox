@@ -1,7 +1,7 @@
 #!/bin/bash
 # You're meant to run this only if you're CentOS
-OPENRESOLV_URL=`curl http://roy.marples.name/projects/openresolv/index 2>/dev/null | grep ftp | sed 's/<\/a>//' | sed 's/^.*\">//'`
-OPENRESOLV_TARBALL=`echo $OPENRESOLV_URL | sed 's/.*\///'`
+OPENRESOLV_URL=`curl http://roy.marples.name/projects/openresolv/index 2>/dev/null | tr -d '\r' | grep ftp | sed 's/<\/a>//' | sed 's/^.*\">//'`
+OPENRESOLV_TARBALL=`echo $OPENRESOLV_URL | sed 's/^.*\///'`
 OPENRESOLV_DIR=`echo $OPENRESOLV_TARBALL | sed 's/\.tar.*$//'`
 
 cd /tmp
