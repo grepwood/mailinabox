@@ -33,13 +33,13 @@ fi
 
 if [ "$DISTRO" = "RedHat" ]; then
 	if [ "$DISTRO_VERSION" -ge "70" ]; then
-		PYTHON="python3"
+		PYTHON="/usr/bin/python3"
 	elif [ "$DISTRO_VERSION" -lt "70" ]; then
-		PYTHON="python2"
+		PYTHON="/usr/bin/python2"
 	fi
 elif [ "$DISTRO" = "Ubuntu" ]; then
 	if [ "$DISTRO_VERSION" -ge "1404" ]; then
-		PYTHON="python3"
+		PYTHON="/usr/bin/python3"
 	fi
 fi
 
