@@ -10,3 +10,6 @@ yum install iptables-ipv6 -y -q
 $PYTHON setup.py install
 cd /tmp
 rm -rf ufw-$LATEST_UFW{,.tar.gz}
+
+chmod 644 /etc/default/ufw /etc/ufw/ufw.conf /etc/ufw/applications.d/ufw-*
+chmod 755 /lib/ufw/ufw-init /usr/sbin/ufw
