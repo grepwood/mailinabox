@@ -1,10 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 from __future__ import print_function
-import sys, getpass, json
-if sys.version[0] == 3:
-	import urllib.request, urllib.error
-if sys.version[0] == 2:
-	import urllib2
+import sys, getpass, json, urllib2
 
 def mgmt(cmd, data=None, is_json=False):
 	# The base URL for the management daemon. (Listens on IPv4 only.)
@@ -12,10 +8,10 @@ def mgmt(cmd, data=None, is_json=False):
 
 	setup_key_auth(mgmt_uri)
 
-	req = urllib.request.Request(mgmt_uri + cmd, urllib.parse.urlencode(data).encode("utf8") if data else None)
+	req = urllib2.Request(mgmt_uri + cmd, urllib2.urlencode(data).encode("utf8") if data else None)
 	try:
-		response = urllib.request.urlopen(req)
-	except urllib.error.HTTPError as e:
+		response = urllib2.urlopen(req)
+	except urllib2.HTTPError as e:
 		if e.code == 401:
 			try:
 				print(e.read().decode("utf8"))
@@ -42,22 +38,15 @@ def read_password():
 
 def setup_key_auth(mgmt_uri):
 	key = open('/var/lib/mailinabox/api.key').read().strip()
-	if sys.version[0] == 3:
-		auth_handler = urllib.request.HTTPBasicAuthHandler()
-	if sys.version[0] == 2:
-		auth_handler = urllib2.HTTPBasicAuthHandler()
+	auth_handler = urllib2.HTTPBasicAuthHandler()
 
 	auth_handler.add_password(
 		realm='Mail-in-a-Box Management Server',
 		uri=mgmt_uri,
 		user=key,
 		passwd='')
-	if sys.version[0] == 3:
-		opener = urllib.request.build_opener(auth_handler)
-		urllib.request.install_opener(opener)
-	if sys.version[0] == 2:
-		opener = urllib2.build_opener(auth_handler)
-		urllib2.install_opener(opener)
+	opener = urllib2.build_opener(auth_handler)
+	urllib2.install_opener(opener)
 
 if len(sys.argv) < 2:
 	print("Usage: ")
