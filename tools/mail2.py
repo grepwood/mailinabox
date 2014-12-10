@@ -46,6 +46,7 @@ def setup_key_auth(mgmt_uri):
 		auth_handler = urllib.request.HTTPBasicAuthHandler()
 	if sys.version[0] == 2:
 		auth_handler = urllib2.HTTPBasicAuthHandler()
+
 	auth_handler.add_password(
 		realm='Mail-in-a-Box Management Server',
 		uri=mgmt_uri,
