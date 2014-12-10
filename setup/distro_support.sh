@@ -45,7 +45,7 @@ function detect_distro {
 		PYTHON="python3"
 	elif [ "$DISTRO" = "RedHat" ]; then
 		if [ "$DISTRO_VERSION" -ge "70" ]; then
-			PYTHON="python3"
+			PYTHON="python2"
 		elif [ "$DISTRO_VERSION" -lt "70" ]; then
 			PYTHON="python2"
 		fi
