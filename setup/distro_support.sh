@@ -20,11 +20,14 @@ function prepare_crossdistro {
 	DISTRO_VERSION=`lsb_release -r | awk '{print $2}' | sed -e 's:\.:\ :g' | awk '{print $1$2}'`
 	if [ "$DISTRO" = "Ubuntu" ]; then
 		PYTHON="python3"
+		MAIL_PY="mail3.py"
 	elif [ "$DISTRO" = "RedHat" ]; then
 		if [ "$DISTRO_VERSION" -ge "70" ]; then
 			PYTHON="python2"
+			MAIL_PY="mail2.py"
 		elif [ "$DISTRO_VERSION" -lt "70" ]; then
 			PYTHON="python2"
+			MAIL_PY="mail2.py"
 		fi
 	fi
 }
@@ -43,11 +46,14 @@ function detect_distro {
 	DISTRO_VERSION=`lsb_release -r | awk '{print $2}' | sed -e 's:\.:\ :g' | awk '{print $1$2}'`
 	if [ "$DISTRO" = "Ubuntu" ]; then
 		PYTHON="python3"
+		MAIL_PY="mail3.py"
 	elif [ "$DISTRO" = "RedHat" ]; then
 		if [ "$DISTRO_VERSION" -ge "70" ]; then
 			PYTHON="python2"
+			MAIL_PY="mail2.py"
 		elif [ "$DISTRO_VERSION" -lt "70" ]; then
 			PYTHON="python2"
+			MAIL_PY="mail2.py"
 		fi
 	fi
 }

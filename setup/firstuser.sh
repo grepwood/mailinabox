@@ -1,6 +1,6 @@
 # If there aren't any mail users yet, create one.
-if [ -z "`$PYTHON tools/mail.py user`" ]; then
-	# The outut of "tools/mail.py user" is a list of mail users. If there
+if [ -z "`$PYTHON tools/$MAIL_PY user`" ]; then
+	# The outut of "tools/$MAIL_PY user" is a list of mail users. If there
 	# aren't any yet, it'll be empty.
 
 	# If we didn't ask for an email address at the start, do so now.
@@ -49,11 +49,11 @@ if [ -z "`$PYTHON tools/mail.py user`" ]; then
 	fi
 
 	# Create the user's mail account. This will ask for a password if none was given above.
-	$PYTHON tools/mail.py user add $EMAIL_ADDR $EMAIL_PW
+	$PYTHON tools/$MAIL_PY user add $EMAIL_ADDR $EMAIL_PW
 
 	# Make it an admin.
-	hide_output $PYTHON tools/mail.py user make-admin $EMAIL_ADDR
+	hide_output $PYTHON tools/$MAIL_PY user make-admin $EMAIL_ADDR
 
 	# Create an alias to which we'll direct all automatically-created administrative aliases.
-	$PYTHON tools/mail.py alias add administrator@$PRIMARY_HOSTNAME $EMAIL_ADDR
+	$PYTHON tools/$MAIL_PY alias add administrator@$PRIMARY_HOSTNAME $EMAIL_ADDR
 fi

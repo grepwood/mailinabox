@@ -64,7 +64,9 @@ fi
 # nmap.
 GOOGLE="aspmx.l.google.com"
 if [ "$DISTRO" = "RedHat" ] && [ "$DISTRO_VERSION" -ge "70" ]; then
-	yum install nmap -y -q
+	if [ "`rpm -qa nmap | wc -l`" -eq "0" ]; then
+		yum install nmap -y -q
+	fi
 	if [ "`nmap --open -p 25 $GOOGLE 2>&1 | grep ^25\/tcp.*smtp$ | awk '{print $2}'`" != "open" ]; then
 		exit_due_to_ncat
 	fi
