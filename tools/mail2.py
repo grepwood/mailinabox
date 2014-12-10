@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 from __future__ import print_function
-import sys, getpass, json, urllib2
+import sys, getpass, json, urllib, urllib2
 
 def mgmt(cmd, data=None, is_json=False):
 	# The base URL for the management daemon. (Listens on IPv4 only.)
@@ -8,7 +8,7 @@ def mgmt(cmd, data=None, is_json=False):
 
 	setup_key_auth(mgmt_uri)
 
-	req = urllib2.Request(mgmt_uri + cmd, urllib2.urlencode(data).encode("utf8") if data else None)
+	req = urllib2.Request(mgmt_uri + cmd, urllib.urlencode(data).encode("utf8") if data else None)
 	try:
 		response = urllib2.urlopen(req)
 	except urllib2.HTTPError as e:
