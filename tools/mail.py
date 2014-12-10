@@ -4,7 +4,7 @@ import sys, getpass, json
 if sys.version[0] == 3:
 	import urllib.request, urllib.error
 if sys.version[0] == 2:
-	import requests
+	import urllib2
 
 def mgmt(cmd, data=None, is_json=False):
 	# The base URL for the management daemon. (Listens on IPv4 only.)
@@ -42,15 +42,21 @@ def read_password():
 
 def setup_key_auth(mgmt_uri):
 	key = open('/var/lib/mailinabox/api.key').read().strip()
-
-	auth_handler = urllib.request.HTTPBasicAuthHandler()
+	if sys.version[0] == 3:
+		auth_handler = urllib.request.HTTPBasicAuthHandler()
+	if sys.version[0] == 2:
+		auth_handler = urllib2.HTTPBasicAuthHandler()
 	auth_handler.add_password(
 		realm='Mail-in-a-Box Management Server',
 		uri=mgmt_uri,
 		user=key,
 		passwd='')
-	opener = urllib.request.build_opener(auth_handler)
-	urllib.request.install_opener(opener)
+	if sys.version[0] == 3:
+		opener = urllib.request.build_opener(auth_handler)
+		urllib.request.install_opener(opener)
+	if sys.version[0] == 2:
+		opener = urllib2.build_opener(auth_handler)
+		urllib2.install_opener(opener)
 
 if len(sys.argv) < 2:
 	print("Usage: ")

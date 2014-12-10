@@ -55,6 +55,9 @@ you really want.
 				"That's not a valid email address.\n\nWhat email address are you setting this box up to manage?" \
 				$EMAIL_ADDR \
 				EMAIL_ADDR
+			if [ "$DISTRO" = "RedHat" ] && [ "$DISTRO_VERSION" -ge "70" ]; then
+				echo "$result"
+				echo "$result_code"
 			if [ "$result_code" -ne "1" ]; then
 				# user hit ESC/cancel
 				exit
