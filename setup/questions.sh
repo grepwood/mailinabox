@@ -58,6 +58,7 @@ you really want.
 			if [ "$DISTRO" = "RedHat" ] && [ "$DISTRO_VERSION" -ge "70" ]; then
 				echo "$result"
 				echo "$result_code"
+			fi
 			if [ "$result_code" -ne "1" ]; then
 				# user hit ESC/cancel
 				exit
