@@ -32,8 +32,10 @@ else
 fi
 
 if [ "$DISTRO" = "RedHat" ]; then
+# I know this check is redundant but this way we may in the future
+# introduce Python 3 on CentOS 7 a lot more easily
 	if [ "$DISTRO_VERSION" -ge "70" ]; then
-		PYTHON="/usr/bin/python3"
+		PYTHON="/usr/bin/python2"
 	elif [ "$DISTRO_VERSION" -lt "70" ]; then
 		PYTHON="/usr/bin/python2"
 	fi

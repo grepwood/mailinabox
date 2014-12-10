@@ -13,7 +13,6 @@ function prepare_crossdistro {
 	elif command -v apt-get 2>&1 1>/dev/null; then
 		DISTRO="Ubuntu"
 		SATISFIED=1
-		PYTHON="python3"
 	else
 		echo "Your distro is not supported"
 		exit
@@ -23,7 +22,7 @@ function prepare_crossdistro {
 		PYTHON="python3"
 	elif [ "$DISTRO" = "RedHat" ]; then
 		if [ "$DISTRO_VERSION" -ge "70" ]; then
-			PYTHON="python3"
+			PYTHON="python2"
 		elif [ "$DISTRO_VERSION" -lt "70" ]; then
 			PYTHON="python2"
 		fi
