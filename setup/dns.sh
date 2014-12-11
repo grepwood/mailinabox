@@ -37,7 +37,11 @@ elif [ "$DISTRO" = "RedHat" ]; then
 			rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm 2>/dev/null
 		fi
 	fi
-	yum install ... ldns openssh openssh-clients -y -q --enablerepo=epel
+	if [ "$DISTRO_VERSION" -ge "70" ]; then
+		yum install ... ldns openssh openssh-clients -y -q
+	else
+		yum install ... ldns openssh openssh-clients -y -q --enablerepo=epel
+	fi
 fi
 
 # Prepare nsd's configuration.
