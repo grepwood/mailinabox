@@ -47,6 +47,10 @@ fi
 
 rm -f /etc/nginx/sites-enabled/default
 
+# Good god I don't know how this happens on Ubuntu, but on CentOS the default config
+# is WAY different so we're going to shamelessly rip it off
+cp conf/nginx.conf /etc/nginx
+
 # Copy in a nginx configuration file for common and best-practices
 # SSL settings from @konklone. Replace STORAGE_ROOT so it can find
 # the DH params.
