@@ -32,7 +32,8 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 elif [ "$DISTRO" = "RedHat" ]; then
 	if [ "`rpm -qa epel-release | wc -l`" -eq "0" ]; then
 		if [ "$DISTRO_VERSION" -ge "70" ]; then
-			rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-2.noarch.rpm 2>/dev/null
+			FILE=`curl http://dl.fedoraproject.org/pub/epel//7/x86_64/e/ 2>/dev/null | grep "epel\-release" | sed 's/^.*\<a\ href=\"//' | sed 's/\">.*//'`
+			rpm -Uvh http://dl.fedoraproject.org/pub/epel//7/x86_64/e/$FILE 2>/dev/null
 		elif [ "$DISTRO_VERSION" -lt "70" ]; then
 			rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm 2>/dev/null
 		fi
