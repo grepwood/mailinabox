@@ -121,7 +121,13 @@ hide_output $PHP /usr/local/lib/owncloud/console.php app:enable user_external
 
 # Set PHP FPM values to support large file uploads
 # (semicolon is the comment character in this file, hashes produce deprecation warnings)
-$PYTHON tools/editconf.py /etc/php5/fpm/php.ini -c ';' \
+# However on CentOS that file is located elsewhere!
+if [ "$DISTRO" = "Ubuntu" ]; then
+	PHP_INI="/etc/php5/fpm/php.ini"
+elif [ "$DISTRO" = "RedHat" ]; then
+	PHP_INI="/opt/remi/php55/root/etc/php.ini"
+fi
+$PYTHON tools/editconf.py $PHP_INI -c ';' \
 	upload_max_filesize=16G \
 	post_max_size=16G \
 	output_buffering=16384 \
