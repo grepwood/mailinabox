@@ -18,11 +18,19 @@ source setup/functions.sh # load our functions
 # Install packages.
 if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install spampd razor pyzor dovecot-antispam
+	LOCAL_CF="/etc/spamassassin/local.cf"
 elif [ "$DISTRO" = "RedHat" ]; then
 	if [ "`rpm -qa atrpms-repo | wc -l`" -eq "0" ]; then
+		if [ "$DISTRO_VERSION" -ge "70" ]; then
 		rpm -ivh http://dl.atrpms.net/all/atrpms-repo-6-7.el6.x86_64.rpm 2>/dev/null
 	fi
-	yum install spamd razor-agents pyzor --enablerepo=atrpms -y -q
+	yum install spamd razor-agents --enablerepo=atrpms -y -q
+	mkdir -p /etc/default
+	echo "ENABLED=0" > /etc/default/spamassassin
+	echo "OPTIONS=\"--create-prefs --max-children 5 --helper-home-dir\"" >> /etc/default/spamassassin
+	echo "PIDFILE=\"/var/run/spamd.pid\"" >> /etc/default/spamassassin
+	echo "CRON=1" >> /etc/default/spamassassin
+	LOCAL_CF="/etc/mail/spamassassin/local.cf"
 fi
 
 # Allow spamassassin to download new rules.
@@ -48,7 +56,7 @@ $PYTHON tools/editconf.py /etc/default/spampd DESTPORT=10026
 #
 # Tell Spamassassin not to modify the original message except for adding
 # the X-Spam-Status mail header and related headers.
-$PYTHON tools/editconf.py /etc/spamassassin/local.cf -s \
+$PYTHON tools/editconf.py $LOCAL_CF -s \
 	report_safe=0
 
 # Bayesean learning
@@ -65,7 +73,7 @@ $PYTHON tools/editconf.py /etc/spamassassin/local.cf -s \
 #
 # We'll have these files owned by spampd and grant access to the other two processes.
 
-$PYTHON tools/editconf.py /etc/spamassassin/local.cf -s \
+$PYTHON tools/editconf.py $LOCAL_CF -s \
 	bayes_path=$STORAGE_ROOT/mail/spamassassin/bayes
 
 mkdir -p $STORAGE_ROOT/mail/spamassassin
