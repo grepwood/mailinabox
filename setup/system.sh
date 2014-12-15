@@ -30,9 +30,18 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 		wget curl sudo \
 		haveged unattended-upgrades ntp fail2ban
 elif [ "$DISTRO" = "RedHat" ]; then
-	yum install ... \
-		wget curl sudo \
-		... ntp ... -y -q
+# We won't have the equivalent of unattended-upgrades on RedHat
+# because me and sysadmins before me found out this kind of stuff
+# unexpectedly breaks things.
+	if [ "`rpm -qa epel-release | wc -l`" -eq "0" ]; then
+		if [ "$DISTRO_VERSION" -lt "70" ]; then
+			rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm 2>/dev/null
+		elif [ "$DISTRO_VERSION" -ge "70" ]; then
+			FILE=`curl http://dl.fedoraproject.org/pub/epel//7/x86_64/e/ 2>/dev/null | grep "epel\-release" | sed 's/^.*\<a\ href=\"//' | sed 's/\">.*//'`
+			rpm -Uvh http://dl.fedoraproject.org/pub/epel//7/x86_64/e/$FILE 2>/dev/null
+		fi
+	fi
+	yum install wget curl sudo python-devel python-pip fail2ban -y -q --enablerepo=epel
 fi
 
 function allow_apt_updates {
