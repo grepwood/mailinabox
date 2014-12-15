@@ -63,7 +63,12 @@ $PYTHON tools/editconf.py /etc/nginx/nginx.conf -s \
 	server_names_hash_bucket_size="64;"
 
 # Bump up PHP's max_children to support more concurrent connections
-$PYTHON tools/editconf.py /etc/php5/fpm/pool.d/www.conf -c ';' \
+if [ "$DISTRO" = "Ubuntu" ]; then
+	WWW_CONF="/etc/php5/fpm/pool.d/www.conf"
+elif [ "$DISTRO" = "RedHat" ]; then
+	WWW_CONF="/opt/remi/php55/root/etc/php-fpm.d/www.conf"
+fi
+$PYTHON tools/editconf.py $WWW_CONF -c ';' \
 	pm.max_children=8
 
 # Other nginx settings will be configured by the management service
