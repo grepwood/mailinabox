@@ -68,6 +68,7 @@ $PYTHON tools/editconf.py /etc/postfix/main.cf \
 	non_smtpd_milters=\$smtpd_milters \
 	milter_default_action=accept
 
+exit
 # Restart services.
 restart_service opendkim
 restart_service postfix
