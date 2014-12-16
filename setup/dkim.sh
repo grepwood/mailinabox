@@ -68,7 +68,7 @@ $PYTHON tools/editconf.py /etc/postfix/main.cf \
 	non_smtpd_milters=\$smtpd_milters \
 	milter_default_action=accept
 # OpenDKIM comes with vastly different configs on CentOS than on Ubuntu
-if [ "$DISTRO_VERSION" = "RedHat" ]; then
+if [ "$DISTRO" = "RedHat" ]; then
 	sed 's/^\#KeyTable\t\/etc\/opendkim\/KeyTable$/KeyTable\t\/etc\/opendkim\/KeyTable/' /etc/opendkim.conf | sed 's/^KeyFile\t\/etc\/opendkim\/keys\/default\.private$/\#KeyFile\t\/etc\/opendkim\/keys\/default\.private/' > /etc/opendkim.conf.new
 	mv /etc/opendkim.conf.new /etc/opendkim.conf
 fi
