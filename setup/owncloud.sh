@@ -157,5 +157,6 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 	php5enmod imap
 	restart_service php5-fpm
 elif [ "$DISTRO" = "RedHat" ]; then
+	cp /opt/remi/php55/root/usr/share/doc/php55-php-fpm-5.5.*/php-fpm.conf.default /opt/remi/php55/root/etc/php-fpm.d/www.conf
 	restart_service php55-php-fpm
 fi
