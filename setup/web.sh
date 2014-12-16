@@ -48,8 +48,8 @@ fi
 rm -f /etc/nginx/sites-enabled/default
 
 # Good god I don't know how this happens on Ubuntu, but on CentOS the default config
-# is WAY different so we're going to shamelessly rip it off
-cp conf/nginx.conf /etc/nginx
+# is WAY different so we're going to shamelessly rip it off AND fix some Remi issues
+sed 's/fastcgi_pass\ php\-fpm\;$/fastcgi_pass\ 127\.0\.0\.1\:9000\;/' conf/nginx.conf > /etc/nginx/nginx.conf
 
 # Copy in a nginx configuration file for common and best-practices
 # SSL settings from @konklone. Replace STORAGE_ROOT so it can find
