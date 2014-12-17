@@ -59,7 +59,7 @@ SCRIPTNAME=/etc/init.d/$NAME
 
 # Set defaults.
 START=yes
-EXEC_AS_USER=root
+EXEC_AS_USER="root"
 
 # Ensure Python reads/writes files in UTF-8. If the machine
 # triggers some other locale in Python, like ASCII encoding,
@@ -117,13 +117,13 @@ do_start()
 					$DAEMON_ARGS \
 					|| return 2
 		elif [ "$DISTRO" = "RedHat" ]; then
-			if  pgrep -u $USERNAME -f $SERVICE > /dev/null; then
+			if  pgrep -u $EXEC_AS_USER -f \"$SERVICE\" > /dev/null; then
 				echo "$SERVICE is already running!"
 				return 1
 			else
 				as_user "screen -h $HISTORY -dmS mailinabox $PYTHON $DAEMON -- $DAEMON_ARGS"
 				sleep 5
-				if pgrep -u $EXEC_AS_USER -f $SERVICE > /dev/null; then
+				if pgrep -u $EXEC_AS_USER -f \"$SERVICE\" > /dev/null; then
 					echo "mailinabox is now running."
 					return 0
 				else
@@ -156,9 +156,9 @@ do_stop()
         # Many daemons don't delete their pidfiles when they exit.
 		rm -f $PIDFILE
 	elif [ "$DISTRO" = "Redhat" ]; then
-		if pgrep -u $EXEC_AS_USER -f $SERVICE > /dev/null; then
+		if pgrep -u $EXEC_AS_USER -f \"$SERVICE\" > /dev/null; then
 			echo "Stopping $SERVICE"
-			as_user "kill -9 `pgrep -u $EXEC_AS_USER -f $SERVICE`"
+			as_user "kill -9 `pgrep -u $EXEC_AS_USER -f \"$SERVICE\"`"
 			sleep 7
 			RETVAL=0
 			return 0
@@ -167,7 +167,7 @@ do_stop()
 			RETVAL=1
 			return 1
 		fi
-		if pgrep -u $USERNAME -f $SERVICE > /dev/null; then
+		if pgrep -u $EXEC_AS_USER -f \"$SERVICE\" > /dev/null; then
 			echo "Error! $SERVICE could not be stopped."
 			RETVAL=2
 			return 2
