@@ -2,10 +2,11 @@ import base64, os, os.path
 
 from flask import make_response
 
-import utils
+import utils, shutil
 from mailconfig import get_mail_user_privileges
 
 DEFAULT_KEY_PATH   = '/var/lib/mailinabox/api.key'
+DEFAULT_KEY_DIR   = '/var/lib/mailinabox'
 DEFAULT_AUTH_REALM = 'Mail-in-a-Box Management Server'
 
 class KeyAuthService:
@@ -19,6 +20,7 @@ class KeyAuthService:
 		self.auth_realm = DEFAULT_AUTH_REALM
 		self.key = self._generate_key()
 		self.key_path = DEFAULT_KEY_PATH
+		self.key_dir = DEFAULT_KEY_DIR
 
 	def write_key(self):
 		"""Write key to file so authorized clients can get the key
@@ -35,7 +37,9 @@ class KeyAuthService:
 			finally:
 				os.umask(old_umask)
 
-		os.makedirs(os.path.dirname(self.key_path), exist_ok=True)
+		if os.path.isdir(self.key_dir):
+			shutil.rmtree(self.key_dir)
+		os.makedirs(os.path.dirname(self.key_path))
 
 		with create_file_with_mode(self.key_path, 0o640) as key_file:
 			key_file.write(self.key + '\n')
