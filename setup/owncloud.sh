@@ -15,9 +15,8 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 
 	apt-get purge -qq -y owncloud*
 elif [ "$DISTRO" = "RedHat" ]; then
-	yum install php55-php-{cli,pear,xml,fpm} curl apr libtool libcurl-devel \
-		php55 memcached unzip -y -q --enablerepo=remi,remi-php55
-#Remi needs to package PHP extension for memcached, gd, imap and sqlite
+	yum install php55-php-{mbstring,pdo,cli,pear,xml,fpm,gd,imap,pecl-{memcache,sqlite}} \
+		curl apr libtool libcurl-devel php55 memcached unzip -y -q --enablerepo=remi,remi-php55
 fi
 # Install ownCloud from source of this version:
 owncloud_ver=7.0.3
