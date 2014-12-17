@@ -14,9 +14,11 @@ echo "unset RAMLOCK" >> /lib/init/vars.sh
 echo "if [ -r /proc/cmdline ]; then" >> /lib/init/vars.sh
 printf "\tfor ARG in \$(cat /proc/cmdline); do\n" >> /lib/init/vars.sh
 printf "\t\tcase \$ARG in\n" >> /lib/init/vars.sh
+printf "\t\t\tnoswap)\n" >> /lib/init/vars.sh
 printf "\t\tNOSWAP=yes\n" >> /lib/init/vars.sh
 printf "\t\tbreak\n" >> /lib/init/vars.sh
 printf "\t\t;;\n" >> /lib/init/vars.sh
+printf "\t\t\tquiet)\n" >> /lib/init/vars.sh
 printf "\t\tif [ \"\$RUNLEVEL\" ] && [ \"\$PREVLEVEL\" ] ; then\n" >> /lib/init/vars.sh
 printf "\t\t\tVERBOSE=\"no\"\n" >> /lib/init/vars.sh
 printf "\t\tfi\n" >> /lib/init/vars.sh
