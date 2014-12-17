@@ -55,14 +55,14 @@ class KeyAuthService:
 		def parse_basic_auth(header):
 			if " " not in header:
 				return None, None
-			scheme, credentials = header.split(maxsplit=1)
+			scheme, credentials = header.split(1)
 			if scheme != 'Basic':
 				return None, None
 
 			credentials = decode(credentials)
 			if ":" not in credentials:
 				return None, None
-			username, password = credentials.split(':', maxsplit=1)
+			username, password = credentials.split(':', 1)
 			return username, password
 
 		header = request.headers.get('Authorization')
