@@ -61,6 +61,14 @@ sed "s#STORAGE_ROOT#$STORAGE_ROOT#" \
 # The server_names_hash_bucket_size seems to prevent long domain names?
 $PYTHON tools/editconf.py /etc/nginx/nginx.conf -s \
 	server_names_hash_bucket_size="64;"
+if [ "$DISTRO" = "RedHat" ]; then
+	JOB_PID=$$
+	head -n1 /etc/nginx/nginx.conf > nginx.conf.$JOB_PID
+	echo "http {" >> nginx.conf.$JOB_PID
+	tail -n+3 /etc/nginx/nginx.conf >> nginx.conf.$JOB_PID
+	mv nginx.conf.$JOB_PID /etc/nginx/nginx.conf
+	echo "}" >> /etc/nginx/nginx.conf
+fi
 
 # Bump up PHP's max_children to support more concurrent connections
 if [ "$DISTRO" = "Ubuntu" ]; then
