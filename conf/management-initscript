@@ -39,6 +39,8 @@ if [ "$DISTRO" = "RedHat" ]; then
 	elif [ "$DISTRO_VERSION" -lt "70" ]; then
 		PYTHON="/usr/bin/python2"
 	fi
+# Need to be able to daemonize
+	source /etc/init.d/functions
 elif [ "$DISTRO" = "Ubuntu" ]; then
 	if [ "$DISTRO_VERSION" -ge "1404" ]; then
 		PYTHON="/usr/bin/python3"
@@ -90,19 +92,46 @@ fi
 #export ...
 DAEMON_ARGS=""
 
+HISTORY=1024
+ME=`whoami`
+as_user() {
+	if [ "$ME" = "$EXEC_AS_USER" ]; then
+		bash -c "$1"
+	else
+		su - $EXEC_AS_USER -c "$1"
+	fi
+}
 
+SERVICE="$PYTHON $DAEMON"
 do_start()
 {
         # Return
         #   0 if daemon has been started
         #   1 if daemon was already running
         #   2 if daemon could not be started
-        start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $PYTHON $DAEMON --test > /dev/null \
-                || return 1
-        start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $PYTHON $DAEMON \
-                --background --make-pidfile --chuid $EXEC_AS_USER --startas $PYTHON $DAEMON -- \
-                $DAEMON_ARGS \
-                || return 2
+        if [ "$DISTRO" = "Ubuntu" ]; then
+			start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $PYTHON $DAEMON --test > /dev/null \
+					|| return 1
+			start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $PYTHON $DAEMON \
+					--background --make-pidfile --chuid $EXEC_AS_USER --startas $PYTHON $DAEMON -- \
+					$DAEMON_ARGS \
+					|| return 2
+		elif [ "$DISTRO" = "RedHat" ]; then
+			if  pgrep -u $USERNAME -f $SERVICE > /dev/null; then
+				echo "$SERVICE is already running!"
+				return 1
+			else
+				as_user "screen -h $HISTORY -dmS mailinabox $PYTHON $DAEMON -- $DAEMON_ARGS"
+				sleep 5
+				if pgrep -u $EXEC_AS_USER -f $SERVICE > /dev/null; then
+					echo "mailinabox is now running."
+					return 0
+				else
+					echo "Error! Could not start mailinabox!"
+					return 2
+				fi
+			fi
+		fi
 }
 
 do_stop()
@@ -112,20 +141,43 @@ do_stop()
         #   1 if daemon was already stopped
         #   2 if daemon could not be stopped
         #   other if a failure occurred
-        start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE > /dev/null # --name $DAEMON
-        RETVAL="$?"
-        [ "$RETVAL" = 2 ] && return 2
+	if [ "$DISTRO" = "Ubuntu" ]; then
+		start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE > /dev/null # --name $DAEMON
+		RETVAL="$?"
+		[ "$RETVAL" = 2 ] && return 2
         # Wait for children to finish too if this is a daemon that forks
         # and if the daemon is only ever run from this initscript.
         # If the above conditions are not satisfied then add some other code
         # that waits for the process to drop all resources that could be
         # needed by services started subsequently.  A last resort is to
         # sleep for some time.
-        start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $PYTHON $DAEMON
-        [ "$?" = 2 ] && return 2
+		start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $PYTHON $DAEMON
+		[ "$?" = 2 ] && return 2
         # Many daemons don't delete their pidfiles when they exit.
-        rm -f $PIDFILE
-        return "$RETVAL"
+		rm -f $PIDFILE
+	elif [ "$DISTRO" = "Redhat" ]; then
+		if pgrep -u $EXEC_AS_USER -f $SERVICE > /dev/null; then
+			echo "Stopping $SERVICE"
+			as_user "kill -9 `pgrep -u $EXEC_AS_USER -f $SERVICE`"
+			sleep 7
+			RETVAL=0
+			return 0
+		else
+			echo "$SERVICE was not running."
+			RETVAL=1
+			return 1
+		fi
+		if pgrep -u $USERNAME -f $SERVICE > /dev/null; then
+			echo "Error! $SERVICE could not be stopped."
+			RETVAL=2
+			return 2
+		else
+			echo "$SERVICE is stopped."
+			RETVAL=0
+			return 0
+		fi
+	fi
+	return "$RETVAL"
 }
 case "$1" in
   start)

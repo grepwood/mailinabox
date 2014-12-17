@@ -41,7 +41,7 @@ elif [ "$DISTRO" = "RedHat" ]; then
 			rpm -Uvh http://dl.fedoraproject.org/pub/epel//7/x86_64/e/$FILE 2>/dev/null
 		fi
 	fi
-	yum install wget curl sudo python-devel python-pip fail2ban -y -q --enablerepo=epel
+	yum install wget curl sudo python-devel python-pip fail2ban screen -y -q --enablerepo=epel
 fi
 
 function allow_apt_updates {
@@ -124,6 +124,7 @@ elif [ "$DISTRO" = "RedHat" ]; then
 	echo "# startup options for the server" >> /etc/default/bind9
 	echo "OPTIONS=\"-u bind\"" >> /etc/default/bind9
 	source setup/supplement_openresolv.sh
+	source setup/supplement_vars.sh
 fi
 $PYTHON tools/editconf.py /etc/default/bind9 \
 	RESOLVCONF=yes \
