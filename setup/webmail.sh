@@ -43,6 +43,10 @@ elif [ "$DISTRO" = "RedHat" ]; then
 	yum remove roundcubemail -y -q
 fi
 
+if [ "$DISTRO" = "RedHat" ]; then
+	useradd -m www-data
+fi
+
 # Install Roundcube from source if it is not already present or if it is out of date.
 VERSION=1.0.3
 needs_update=0 #NODOC

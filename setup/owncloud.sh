@@ -110,7 +110,11 @@ EOF
 
 	# Execute ownCloud's setup step, which creates the ownCloud sqlite database.
 	# It also wipes it if it exists. And it deletes the autoconfig.php file.
-	(cd /usr/local/lib/owncloud; sudo -u www-data php /usr/local/lib/owncloud/index.php;)
+	if [ "$DISTRO" = "Ubuntu" ]; then
+		(cd /usr/local/lib/owncloud; sudo -u www-data php /usr/local/lib/owncloud/index.php;)
+	elif [ "$DISTRO" = "RedHat" ]; then
+		(cd /usr/local/lib/owncloud; sudo -u www-data php55 /usr/local/lib/owncloud/index.php;)
+	fi
 fi
 
 # Enable/disable apps. Note that this must be done after the ownCloud setup.
@@ -136,11 +140,19 @@ $PYTHON tools/editconf.py $PHP_INI -c ';' \
 	short_open_tag=On
 
 # Set up a cron job for owncloud.
-cat > /etc/cron.hourly/mailinabox-owncloud << EOF;
+if [ "$DISTRO" = "Ubuntu" ]; then
+	cat > /etc/cron.hourly/mailinabox-owncloud << EOF;
 #!/bin/bash
 # Mail-in-a-Box
 sudo -u www-data php -f /usr/local/lib/owncloud/cron.php
 EOF
+elif [ "$DISTRO" = "RedHat" ]; then
+	cat > /etc/cron.hourly/mailinabox-owncloud << EOF;
+#!/bin/bash
+# Mail-in-a-Box
+sudo -u www-data php55 -f /usr/local/lib/owncloud/cron.php
+EOF
+fi
 chmod +x /etc/cron.hourly/mailinabox-owncloud
 
 # There's nothing much of interest that a user could do as an admin for ownCloud,

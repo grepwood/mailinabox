@@ -102,7 +102,8 @@ as_user() {
 	fi
 }
 
-SERVICE="\"$PYTHON $DAEMON\""
+#SERVICE="\"$PYTHON $DAEMON\""
+SERVICE="$PYTHON $DAEMON"
 echo "$SERVICE"
 do_start()
 {
