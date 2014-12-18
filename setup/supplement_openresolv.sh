@@ -11,7 +11,7 @@ if [ "`rpm -qa bzip2 | wc -l`" -ne "1" ]; then
 fi
 tar -xf $OPENRESOLV_TARBALL
 cd $OPENRESOLV_DIR
-./configure
-make install
+./configure 2>&1 1>/dev/null
+make install 2>&1 1>/dev/null
 cd $REAL_PWD
 rm -rf /tmp/$OPENRESOLV_DIR /tmp/$OPENRESOLV_TARBALL
