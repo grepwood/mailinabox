@@ -17,7 +17,9 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 elif [ "$DISTRO" = "RedHat" ]; then
 	yum install php55-php-{mbstring,pdo,cli,pear,xml,fpm,gd,imap,pecl-{memcache,sqlite}} \
 		curl apr libtool libcurl-devel php55 memcached unzip -y -q --enablerepo=remi,remi-php55
-	/opt/remi/php55/root/bin/pear install pear/Net_IMAP
+	if [ "`/opt/remi/php55/root/bin/pear list | grep ^Net_IMAP | wc -l`" -eq "0" ]; then
+		/opt/remi/php55/root/bin/pear install pear/Net_IMAP
+	fi
 fi
 # Install ownCloud from source of this version:
 owncloud_ver=7.0.3
@@ -111,7 +113,6 @@ EOF
 	# Create user data directory and set permissions
 	mkdir -p $STORAGE_ROOT/owncloud
 	chown -R www-data.www-data $STORAGE_ROOT/owncloud /usr/local/lib/owncloud
-	exit
 	# Execute ownCloud's setup step, which creates the ownCloud sqlite database.
 	# It also wipes it if it exists. And it deletes the autoconfig.php file.
 	if [ "$DISTRO" = "Ubuntu" ]; then
@@ -120,13 +121,14 @@ EOF
 		(cd /usr/local/lib/owncloud; sudo -u www-data php55 /usr/local/lib/owncloud/index.php;)
 	fi
 fi
-
+exit
 # Enable/disable apps. Note that this must be done after the ownCloud setup.
 # The firstrunwizard gave Josh all sorts of problems, so disabling that.
 # user_external is what allows ownCloud to use IMAP for login.
 hide_output $PHP /usr/local/lib/owncloud/console.php app:disable firstrunwizard
+exit
 hide_output $PHP /usr/local/lib/owncloud/console.php app:enable user_external
-
+exit
 # Set PHP FPM values to support large file uploads
 # (semicolon is the comment character in this file, hashes produce deprecation warnings)
 # However on CentOS that file is located elsewhere!
