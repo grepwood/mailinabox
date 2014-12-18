@@ -53,7 +53,8 @@ if [ ! -f $STORAGE_ROOT/owncloud/owncloud.db ]; then
 		TIMEZONE=""
 	fi
 	instanceid=oc$(echo $PRIMARY_HOSTNAME | sha1sum | fold -w 10 | head -n 1)
-	cat > /usr/local/lib/owncloud/config/config.php <<EOF;
+	if [ "$DISTRO" = "Ubuntu" ]; then
+		cat > /usr/local/lib/owncloud/config/config.php <<EOF;
 <?php
 \$CONFIG = array (
   'datadirectory' => '$STORAGE_ROOT/owncloud',
@@ -90,7 +91,7 @@ if [ ! -f $STORAGE_ROOT/owncloud/owncloud.db ]; then
 );
 ?>
 EOF
-
+	fi
 	# Create an auto-configuration file to fill in database settings
 	# when the install script is run. Make an administrator account
 	# here or else the install can't finish.
