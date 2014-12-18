@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# coding=utf8
 #
 # Checks that the upstream DNS has been set correctly and that
 # SSL certificates have been signed, etc., and if not tells the user
