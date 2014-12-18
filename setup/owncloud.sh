@@ -17,6 +17,7 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 elif [ "$DISTRO" = "RedHat" ]; then
 	yum install php55-php-{mbstring,pdo,cli,pear,xml,fpm,gd,imap,pecl-{memcache,sqlite}} \
 		curl apr libtool libcurl-devel php55 memcached unzip -y -q --enablerepo=remi,remi-php55
+	/opt/remi/php55/root/bin/pear install pear/Net_IMAP
 fi
 # Install ownCloud from source of this version:
 owncloud_ver=7.0.3
@@ -44,7 +45,11 @@ fi
 # the database does exist wipes the database and user data.
 if [ ! -f $STORAGE_ROOT/owncloud/owncloud.db ]; then
 	# Create a configuration file.
-	TIMEZONE=$(cat /etc/timezone)
+	if [ -f "/etc/timezone" ]; then
+		TIMEZONE=$(cat /etc/timezone)
+	else
+		TIMEZONE=""
+	fi
 	instanceid=oc$(echo $PRIMARY_HOSTNAME | sha1sum | fold -w 10 | head -n 1)
 	cat > /usr/local/lib/owncloud/config/config.php <<EOF;
 <?php
@@ -106,7 +111,7 @@ EOF
 	# Create user data directory and set permissions
 	mkdir -p $STORAGE_ROOT/owncloud
 	chown -R www-data.www-data $STORAGE_ROOT/owncloud /usr/local/lib/owncloud
-
+	exit
 	# Execute ownCloud's setup step, which creates the ownCloud sqlite database.
 	# It also wipes it if it exists. And it deletes the autoconfig.php file.
 	if [ "$DISTRO" = "Ubuntu" ]; then
