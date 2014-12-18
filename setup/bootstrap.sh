@@ -38,8 +38,6 @@ else
 	echo "Your system is not supported"
 	exit
 fi
-echo $DISTRO_VERSION
-exit
 
 if [ $DISTRO = "Ubuntu" ]; then
 	apt-get -q -q install -y git < /dev/null
