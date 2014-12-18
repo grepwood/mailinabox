@@ -29,7 +29,7 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 elif [ "$DISTRO" = "RedHat" ]; then
 	yum install dbconfig_omg \
 		php55 php55-php-{intl,mcrypt,pecl-{jsonc,gnupg,sqlite},pspell,gd} \
-		tinymce -y -q --enablerepo=remi,remi-php55
+		tinymce -y -q --enablerepo=remi,remi-php55 >/dev/null
 	/opt/remi/php55/root/usr/bin/pear install pear/Mail_Mime pear/Net_Sieve pear/Net_Socket
 	rpm -Uvh ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/PerryWerneck/CentOS_CentOS-6/noarch/jquery-1.9.1-24.1.noarch.rpm
 #we really need a maintained version of jquery ;_;

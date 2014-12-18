@@ -5,7 +5,7 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install python3-flask links duplicity libyaml-dev python3-dnspython python3-dateutil python3-requests
 	hide_output pip3 install rtyaml
 elif [ "$DISTRO" = "RedHat" ]; then
-	yum install python-flask python-pip links duplicity yaml-cpp-devel python-dns python-dateutil15 -y -q
+	yum install python-flask python-pip links duplicity yaml-cpp-devel python-dns python-dateutil15 -y -q >/dev/null
 	hide_output pip install rtyaml
 fi
 

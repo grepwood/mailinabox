@@ -24,7 +24,7 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 		dovecot-core dovecot-imapd dovecot-lmtpd dovecot-sqlite sqlite3 \
 		dovecot-sieve dovecot-managesieved
 elif [ "$DISTRO" = "RedHat" ]; then
-	yum install dovecot dovecot-pigeonhole -y -q
+	yum install dovecot dovecot-pigeonhole -y -q >/dev/null
 fi
 
 # The `dovecot-imapd` and `dovecot-lmtpd` packages automatically enable IMAP and LMTP protocols.

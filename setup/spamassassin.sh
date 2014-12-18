@@ -24,7 +24,7 @@ elif [ "$DISTRO" = "RedHat" ]; then
 		if [ "$DISTRO_VERSION" -ge "70" ]; then
 		rpm -ivh http://dl.atrpms.net/all/atrpms-repo-6-7.el6.x86_64.rpm 2>/dev/null
 	fi
-	yum install spamd razor-agents --enablerepo=atrpms -y -q
+	yum install spamd razor-agents --enablerepo=atrpms -y -q >/dev/null
 	mkdir -p /etc/default
 	echo "ENABLED=0" > /etc/default/spamassassin
 	echo "OPTIONS=\"--create-prefs --max-children 5 --helper-home-dir\"" >> /etc/default/spamassassin

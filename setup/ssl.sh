@@ -21,7 +21,9 @@ source /etc/mailinabox.conf # load global vars
 if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install openssl
 elif [ "$DISTRO" = "RedHat" ]; then
-	yum install -y -q openssl
+	if [ "`rpm -qa openssl | wc -l`" -eq "0" ]; then
+		yum install -y -q openssl
+	fi
 fi
 
 mkdir -p $STORAGE_ROOT/ssl

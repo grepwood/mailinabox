@@ -10,7 +10,7 @@ if [ -z "$NONINTERACTIVE" ]; then
 	if [ "$DISTRO" = "Ubuntu" ]; then
 		hide_output apt-get -y install dialog
 	elif [ "$DISTRO" = "RedHat" ]; then
-		yum install dialog -y -q
+		yum install dialog -y -q >/dev/null
 	elif [ "$SATISFIED" -eq "0" ]; then
 		exit
 	fi

@@ -17,7 +17,7 @@ function exit_due_to_ncat {
 if [ "$DISTRO" = "Ubuntu" ]; then
 	hide_output apt-get -y install bind9-host sed netcat-openbsd
 elif [ "$DISTRO" = "RedHat" ]; then
-	yum install bind-utils sed nc -y -q
+	yum install bind-utils sed nc -y -q >/dev/null
 fi
 
 # Stop if the PRIMARY_HOSTNAME is listed in the Spamhaus Domain Block List.
@@ -65,7 +65,7 @@ fi
 GOOGLE="aspmx.l.google.com"
 if [ "$DISTRO" = "RedHat" ] && [ "$DISTRO_VERSION" -ge "70" ]; then
 	if [ "`rpm -qa nmap | wc -l`" -eq "0" ]; then
-		yum install nmap -y -q
+		yum install nmap -y -q >/dev/null
 	fi
 	if [ "`nmap --open -p 25 $GOOGLE 2>&1 | grep ^25\/tcp.*smtp$ | awk '{print $2}'`" != "open" ]; then
 		exit_due_to_ncat

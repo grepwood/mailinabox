@@ -21,7 +21,7 @@ elif [ "$DISTRO" = "RedHat" ]; then
 			rpm -Uvh http://dl.fedoraproject.org/pub/epel//7/x86_64/e/$FILE 2>/dev/null
 		fi
 	fi
-	yum install opendkim --enablerepo=epel -y -q
+	yum install opendkim --enablerepo=epel -y -q >/dev/null
 fi
 
 # Make sure configuration directories exist.

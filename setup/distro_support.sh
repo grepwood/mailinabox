@@ -8,7 +8,7 @@ function prepare_crossdistro {
 		DISTRO="RedHat"
 		SATISFIED=1
 		if [ "`rpm -qa redhat-lsb | wc -l`" -eq "0" ]; then
-			yum install redhat-lsb -y -q
+			yum install redhat-lsb -y -q >/dev/null
 		fi
 	elif command -v apt-get 2>&1 1>/dev/null; then
 		DISTRO="Ubuntu"

@@ -16,7 +16,7 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 	apt-get purge -qq -y owncloud*
 elif [ "$DISTRO" = "RedHat" ]; then
 	yum install php55-php-{mbstring,pdo,cli,pear,xml,fpm,gd,imap,pecl-{memcache,sqlite}} \
-		curl apr libtool libcurl-devel php55 memcached unzip -y -q --enablerepo=remi,remi-php55
+		curl apr libtool libcurl-devel php55 memcached unzip -y -q --enablerepo=remi,remi-php55 >/dev/null
 	if [ "`/opt/remi/php55/root/bin/pear list | grep ^Net_IMAP | wc -l`" -eq "0" ]; then
 		/opt/remi/php55/root/bin/pear install pear/Net_IMAP
 	fi

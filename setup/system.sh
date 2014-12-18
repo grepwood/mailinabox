@@ -41,7 +41,7 @@ elif [ "$DISTRO" = "RedHat" ]; then
 			rpm -Uvh http://dl.fedoraproject.org/pub/epel//7/x86_64/e/$FILE 2>/dev/null
 		fi
 	fi
-	yum install wget curl sudo python-devel python-pip fail2ban screen -y -q --enablerepo=epel
+	yum install wget curl sudo python-devel python-pip fail2ban screen -y -q --enablerepo=epel >/dev/null
 fi
 
 function allow_apt_updates {
@@ -117,7 +117,7 @@ fi #NODOC
 if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install bind9 resolvconf
 elif [ "$DISTRO" = "RedHat" ]; then
-	yum install bind-utils
+	yum install bind-utils -y -q >/dev/null
 	mkdir /etc/default
 	echo "# run resolvconf?" > /etc/default/bind9
 	echo "RESOLVCONF=no" >> /etc/default/bind9

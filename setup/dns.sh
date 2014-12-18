@@ -39,9 +39,9 @@ elif [ "$DISTRO" = "RedHat" ]; then
 		fi
 	fi
 	if [ "$DISTRO_VERSION" -ge "70" ]; then
-		yum install ... ldns openssh openssh-clients -y -q
+		yum install ... ldns openssh openssh-clients -y -q >/dev/null
 	else
-		yum install ... ldns openssh openssh-clients -y -q --enablerepo=epel
+		yum install ... ldns openssh openssh-clients -y -q --enablerepo=epel >/dev/null
 	fi
 fi
 

@@ -24,7 +24,7 @@ if command -v yum 2>&1 1>/dev/null; then
 	DISTRO="RedHat"
 	SATISFIED=1
 	if [ "`rpm -qa redhat-lsb | wc -l`" -eq "0" ]; then
-		SHUT_UP_UBUNTU="yum install redhat-lsb -y -q"
+		SHUT_UP_UBUNTU="yum install redhat-lsb -y -q >/dev/null"
 		$SHUT_UP_UBUNTU
 	fi
 elif command -v apt-get 2>&1 1>/dev/null; then
@@ -38,18 +38,20 @@ else
 	echo "Your system is not supported"
 	exit
 fi
+echo $DISTRO_VERSION
+exit
 
 if [ $DISTRO = "Ubuntu" ]; then
 	apt-get -q -q install -y git < /dev/null
 elif [ $DISTRO = "RedHat" ]; then
-	yum install git -y -q
+	yum install git -y -q >/dev/null
 fi
 
 # Clone the Mail-in-a-Box repository if it doesn't exist.
 if [ ! -d $HOME/mailinabox ]; then
 	echo Installing git . . .
 	if [ "$DISTRO" = "RedHat" ]; then
-		CENTOS_FRONTEND=yum install git -y -q
+		CENTOS_FRONTEND=yum install git -y -q >/dev/null
 	elif [ "$DISTRO" = "Ubuntu" ]; then
 		DEBIAN_FRONTEND=noninteractive apt-get -q -q install -y git < /dev/null
 	else

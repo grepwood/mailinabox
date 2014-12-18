@@ -42,7 +42,7 @@ elif [ "$DISTRO" = "RedHat" ]; then
 			rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm 2>/dev/null
 		fi
 	fi
-	yum install nginx php55-php-fpm --enablerepo=nginx,remi,remi-php55 -y -q
+	yum install nginx php55-php-fpm --enablerepo=nginx,remi,remi-php55 -y -q >/dev/null
 fi
 
 rm -f /etc/nginx/sites-enabled/default
