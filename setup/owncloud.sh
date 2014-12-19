@@ -122,7 +122,7 @@ EOF
 		(cd /usr/local/lib/owncloud; sudo -u www-data php55 /usr/local/lib/owncloud/index.php;)
 	fi
 fi
-exit
+#exit
 # Enable/disable apps. Note that this must be done after the ownCloud setup.
 # The firstrunwizard gave Josh all sorts of problems, so disabling that.
 # user_external is what allows ownCloud to use IMAP for login.
