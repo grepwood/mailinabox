@@ -89,6 +89,8 @@ fi
 
 # Create the user named "user-data" and store all persistent user
 # data (mailboxes, etc.) in that user's home directory.
+echo "$STORAGE_ROOT"
+exit
 if [ -z "$STORAGE_ROOT" ]; then
 	STORAGE_USER=user-data
 	if [ ! -d /home/$STORAGE_USER ]; then useradd -m $STORAGE_USER; fi
