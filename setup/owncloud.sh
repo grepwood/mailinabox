@@ -122,14 +122,11 @@ EOF
 		(cd /usr/local/lib/owncloud; sudo -u www-data php55 /usr/local/lib/owncloud/index.php;)
 	fi
 fi
-#exit
 # Enable/disable apps. Note that this must be done after the ownCloud setup.
 # The firstrunwizard gave Josh all sorts of problems, so disabling that.
 # user_external is what allows ownCloud to use IMAP for login.
 hide_output $PHP /usr/local/lib/owncloud/console.php app:disable firstrunwizard
-exit
 hide_output $PHP /usr/local/lib/owncloud/console.php app:enable user_external
-exit
 # Set PHP FPM values to support large file uploads
 # (semicolon is the comment character in this file, hashes produce deprecation warnings)
 # However on CentOS that file is located elsewhere!
