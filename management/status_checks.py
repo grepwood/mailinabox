@@ -4,11 +4,10 @@
 # Checks that the upstream DNS has been set correctly and that
 # SSL certificates have been signed, etc., and if not tells the user
 # what to do next.
-
+from __future__ import print_function
 __ALL__ = ['check_certificate']
-
 import os, os.path, re, subprocess, datetime
-
+import platform
 import dns.reversename, dns.resolver
 import dateutil.parser, dateutil.tz
 
@@ -20,7 +19,7 @@ from utils import shell, sort_domains, load_env_vars_from_file
 
 def run_checks(env, output):
 	# clear the DNS cache so our DNS checks are most up to date
-	shell('check_call', ["/usr/sbin/service", "bind9", "restart"])
+	shell('check_call', ["/usr/sbin/service", bind_service, "restart"])
 	
 	# perform checks
 	env["out"] = output
@@ -617,6 +616,10 @@ class ConsoleOutput:
 if __name__ == "__main__":
 	import sys
 	from utils import load_environment
+	if platform.linux_distribution(full_distribution_name=0)[0] == "centos":
+		bind_service = "bind"
+	elif platform.linux_distribution(full_distribution_name=0)[0] == "ubuntu":
+		bind_service = "bind9"
 	env = load_environment()
 	if len(sys.argv) == 1:
 		run_checks(env, ConsoleOutput())

@@ -3,8 +3,9 @@
 # Creates DNS zone files for all of the domains of all of the mail users
 # and mail aliases and restarts nsd.
 ########################################################################
-
-import os, os.path, urllib.parse, datetime, re, hashlib, base64
+import os, os.path, datetime, re, hashlib, base64, sys
+if sys.version == 3:
+	import urllib.parse
 import ipaddress
 import rtyaml
 import dns.resolver
@@ -830,5 +831,5 @@ if __name__ == "__main__":
 	for zone, records in build_recommended_dns(env):
 		for record in records:
 			print("; " + record['explanation'])
-			print(record['qname'], record['rtype'], record['value'], sep="\t")
+			print(record['qname'],"\t",record['rtype'],"\t",record['value'])
 			print()
