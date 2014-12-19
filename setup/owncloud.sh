@@ -34,7 +34,7 @@ if [ ! -d /usr/local/lib/owncloud/ ] \
 	|| ! grep -q $owncloud_ver /usr/local/lib/owncloud/version.php; then
 
 	echo installing ownCloud...
-	rm -f /tmp/owncloud.zip /usr/local/lib/owncloud
+	rm -rf /tmp/owncloud.zip /usr/local/lib/owncloud
 	wget -qO /tmp/owncloud.zip https://download.owncloud.org/community/owncloud-$owncloud_ver.zip
 	unzip -u -o -q /tmp/owncloud.zip -d /usr/local/lib #either extracts new or replaces current files
 	hide_output $PHP /usr/local/lib/owncloud/occ upgrade #if OC is up-to-date it wont matter
