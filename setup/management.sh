@@ -6,7 +6,7 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 	hide_output pip3 install rtyaml
 elif [ "$DISTRO" = "RedHat" ]; then
 	yum install python-flask python-pip links duplicity yaml-cpp-devel python-dns python-dateutil15 -y -q >/dev/null
-	hide_output pip install rtyaml
+	hide_output pip install rtyaml python-dateutil
 fi
 
 # Create a backup directory and a random key for encrypting backups.
