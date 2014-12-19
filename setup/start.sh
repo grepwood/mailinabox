@@ -89,16 +89,12 @@ fi
 
 # Create the user named "user-data" and store all persistent user
 # data (mailboxes, etc.) in that user's home directory.
-echo "$STORAGE_ROOT"
-exit
-if [ -z "$STORAGE_ROOT" ]; then
-	STORAGE_USER=user-data
-	if [ ! -d /home/$STORAGE_USER ]; then useradd -m $STORAGE_USER; fi
-	STORAGE_ROOT=/home/$STORAGE_USER
-	mkdir -p $STORAGE_ROOT
-	echo $($PYTHON setup/migrate.py --current) > $STORAGE_ROOT/mailinabox.version
-	chown $STORAGE_USER.$STORAGE_USER $STORAGE_ROOT/mailinabox.version
-fi
+STORAGE_USER="user-data"
+if [ ! -d /home/$STORAGE_USER ]; then useradd -m $STORAGE_USER; fi
+STORAGE_ROOT="/home/$STORAGE_USER"
+mkdir -p $STORAGE_ROOT
+echo $($PYTHON setup/migrate.py --current) > $STORAGE_ROOT/mailinabox.version
+chown $STORAGE_USER.$STORAGE_USER $STORAGE_ROOT/mailinabox.version
 
 # Save the global options in /etc/mailinabox.conf so that standalone
 # tools know where to look for data.
