@@ -116,9 +116,17 @@ fi #NODOC
 #   binding to the loopback interface instead of all interfaces.
 if [ "$DISTRO" = "Ubuntu" ]; then
 	apt_install bind9 resolvconf
+	$PYTHON tools/editconf.py /etc/default/bind9 \
+		RESOLVCONF=yes \
+		"OPTIONS=\"-u bind -4\""
+	if ! grep -q "listen-on " /etc/bind/named.conf.options; then
+# Add a listen-on directive if it doesn't exist inside the options block.
+		sed -i "s/^}/\n\tlisten-on { 127.0.0.1; };\n}/" /etc/bind/named.conf.options
+	fi
 elif [ "$DISTRO" = "RedHat" ]; then
-	yum install bind-utils -y -q >/dev/null
-	mkdir /etc/default
+	yum install bind bind-utils -y -q >/dev/null
+	if [ ! -d "/etc/default" ]; then mkdir /etc/default; fi
+	add_option_to_named
 	echo "# run resolvconf?" > /etc/default/bind9
 	echo "RESOLVCONF=no" >> /etc/default/bind9
 	echo "# startup options for the server" >> /etc/default/bind9
@@ -126,13 +134,7 @@ elif [ "$DISTRO" = "RedHat" ]; then
 	source setup/supplement_openresolv.sh
 	source setup/supplement_vars.sh
 fi
-$PYTHON tools/editconf.py /etc/default/bind9 \
-	RESOLVCONF=yes \
-	"OPTIONS=\"-u bind -4\""
-if ! grep -q "listen-on " /etc/bind/named.conf.options; then
-	# Add a listen-on directive if it doesn't exist inside the options block.
-	sed -i "s/^}/\n\tlisten-on { 127.0.0.1; };\n}/" /etc/bind/named.conf.options
-fi
+
 if [ -f /etc/resolvconf/resolv.conf.d/original ]; then
 	echo "Archiving old resolv.conf (was /etc/resolvconf/resolv.conf.d/original, now /etc/resolvconf/resolv.conf.original)." #NODOC
 	mv /etc/resolvconf/resolv.conf.d/original /etc/resolvconf/resolv.conf.original #NODOC
