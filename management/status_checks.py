@@ -42,15 +42,19 @@ def run_system_checks(env):
 		env['out'].print_ok("SSH disallows password-based login.")
 
 	# Check for any software package updates.
-	pkgs = list_apt_updates(apt_update=False)
-	if os.path.exists("/var/run/reboot-required"):
-		env['out'].print_error("System updates have been installed and a reboot of the machine is required.")
-	elif len(pkgs) == 0:
-		env['out'].print_ok("System software is up to date.")
-	else:
-		env['out'].print_error("There are %d software packages that can be updated." % len(pkgs))
-		for p in pkgs:
-			env['out'].print_line("%s (%s)" % (p["package"], p["version"]))
+	if host_distro == "ubuntu":
+		pkgs = list_apt_updates(apt_update=False)
+		if os.path.exists("/var/run/reboot-required"):
+			env['out'].print_error("System updates have been installed and a reboot of the machine is required.")
+		elif len(pkgs) == 0:
+			env['out'].print_ok("System software is up to date.")
+		else:
+			env['out'].print_error("There are %d software packages that can be updated." % len(pkgs))
+			for p in pkgs:
+				env['out'].print_line("%s (%s)" % (p["package"], p["version"]))
+#	elif host_distro == "centos":
+#		pkgs = list_yum_updates(yum_update=False)
+#		if os.path.
 
 	# Check that the administrator alias exists since that's where all
 	# admin email is automatically directed.
@@ -616,9 +620,10 @@ class ConsoleOutput:
 if __name__ == "__main__":
 	import sys
 	from utils import load_environment
-	if platform.linux_distribution(full_distribution_name=0)[0] == "centos":
-		bind_service = "bind"
-	elif platform.linux_distribution(full_distribution_name=0)[0] == "ubuntu":
+	host_distro = platform.linux_distribution(full_distribution_name=0)[0]
+	if host_distro == "centos":
+		bind_service = "named"
+	elif host_distro == "ubuntu":
 		bind_service = "bind9"
 	env = load_environment()
 	if len(sys.argv) == 1:
