@@ -143,14 +143,22 @@ function get_default_privateip {
 
 # This function is meant to be called only on CentOS!
 function add_option_to_named {
-	JOB_PID=$$
-	NEXT_SECTION=`grep \ { /etc/named.conf | grep -vP ^'\t' | grep -vE ^'\ |zone' | tail -n-1`
-	CUTOFF=`cat -n /etc/named.conf | grep "$NEXT_SECTION"$ | awk '{print $1}'`
-	CUTOFF=`expr $CUTOFF - 2`
-	head -n$CUTOFF /etc/named.conf | sed 's/^};//' | sed 's/dnssec\-validation\ .*$/dnssec\-validation\ auto\;/' > tmp.$JOB_PID
-	printf "\tauth-nxdomain no;\n" >> tmp.$JOB_PID
-	tail -n+$CUTOFF /etc/named.conf >> tmp.$JOB_PID
-	mv tmp.$JOB_PID /etc/named.conf
+	NAMED_CONFIG_IS_OKAY_LEAVE_IT_BE="1"
+	if [ "`grep dnssec\-validation /etc/named.conf | awk '{print $2}' | tr -d ';'`" != "auto" ]; then
+		NAMED_CONFIG_IS_OKAY_LEAVE_IT_BE="0"
+	elif [ "`grep auth\-nxdomain /etc/named.conf | wc -l`" -eq "0" ]; then
+		NAMED_CONFIG_IS_OKAY_LEAVE_IT_BE="0"
+	fi
+	if [ "$NAMED_CONFIG_IS_OKAY_LEAVE_IT_BE" -eq "0" ]; then
+		JOB_PID=$$
+		NEXT_SECTION=`grep \ { /etc/named.conf | grep -vP ^'\t' | grep -vE ^'\ |zone' | tail -n-1`
+		CUTOFF=`cat -n /etc/named.conf | grep "$NEXT_SECTION"$ | awk '{print $1}'`
+		CUTOFF=`expr $CUTOFF - 2`
+		head -n$CUTOFF /etc/named.conf | sed 's/^};//' | sed 's/dnssec\-validation\ .*$/dnssec\-validation\ auto\;/' > tmp.$JOB_PID
+		printf "\tauth-nxdomain no;\n" >> tmp.$JOB_PID
+		tail -n+$CUTOFF /etc/named.conf >> tmp.$JOB_PID
+		mv tmp.$JOB_PID /etc/named.conf
+	fi
 }
 
 function ufw_allow {
