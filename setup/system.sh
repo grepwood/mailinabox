@@ -144,4 +144,6 @@ fi
 if [ "$DISTRO" = "Ubuntu" ]; then
 	restart_service bind9
 	restart_service resolvconf
+elif [ "$DISTRO" = "RedHat" ]; then
+	restart_service named
 fi
