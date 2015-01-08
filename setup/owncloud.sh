@@ -144,6 +144,7 @@ $PYTHON tools/editconf.py $PHP_INI -c ';' \
 	short_open_tag=On
 
 # Set up a cron job for owncloud.
+if [ ! -d "/etc/cron.hourly" ]; then mkdir /etc/cron.hourly; fi
 if [ "$DISTRO" = "Ubuntu" ]; then
 	cat > /etc/cron.hourly/mailinabox-owncloud << EOF;
 #!/bin/bash
