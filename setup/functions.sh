@@ -145,11 +145,11 @@ function get_default_privateip {
 function add_option_to_named {
 	JOB_PID=$$
 	NEXT_SECTION=`grep \ { /etc/named.conf | grep -vP ^'\t' | grep -vE ^'\ |zone' | tail -n-1`
-	CUTOFF=`expr \`cat -n /etc/named.conf | grep "$NEXT_SECTION"$ | awk '{print $1}'\` -2 `
+	CUTOFF=`cat -n /etc/named.conf | grep "$NEXT_SECTION"$ | awk '{print $1}'`
+	CUTOFF=`expr $CUTOFF - 2`
 	head -n$CUTOFF /etc/named.conf | sed 's/^};//' | sed 's/dnssec\-validation\ .*$/dnssec\-validation\ auto\;/' > tmp.$JOB_PID
 	printf "\tauth-nxdomain no;\n" >> tmp.$JOB_PID
-	echo "};" >> tmp.$JOB_PID
-	tail -n+`expr $CUTOFF - 1` /etc/named.conf >> tmp.$JOB_PID
+	tail -n+$CUTOFF /etc/named.conf >> tmp.$JOB_PID
 	mv tmp.$JOB_PID /etc/named.conf
 }
 
