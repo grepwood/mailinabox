@@ -212,7 +212,7 @@ function adjust_main_nginx_config {
 	sed 's/^worker_processes.*/worker_processes\ 4;/' /etc/nginx/nginx.conf > $JOB_PID && mv $JOB_PID /etc/nginx/nginx.conf
 	CUTOFF_AT=`cat -n /etc/nginx/nginx.conf | grep http\ \{$ | awk '{print $1}'`
 	head -n$CUTOFF_AT /etc/nginx/nginx.conf > $JOB_PID
-	printf "\tserver_names_hash_bucket_size 64;" >> $JOB_PID
+	printf "\tserver_names_hash_bucket_size 64;\n" >> $JOB_PID
 	tail -n+`expr $CUTOFF_AT + 1` /etc/nginx/nginx.conf >> $JOB_PID
 	mv $JOB_PID /etc/nginx/nginx.conf
 }
