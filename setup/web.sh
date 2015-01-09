@@ -49,7 +49,7 @@ rm -f /etc/nginx/sites-enabled/default
 
 # Good god I don't know how this happens on Ubuntu, but on CentOS the default config
 # is WAY different so we're going to shamelessly rip it off AND fix some Remi issues
-sed 's/fastcgi_pass\ php\-fpm\;$/fastcgi_pass\ 127\.0\.0\.1\:9000\;/' conf/nginx.conf > /etc/nginx/nginx.conf
+#sed 's/fastcgi_pass\ php\-fpm\;$/fastcgi_pass\ 127\.0\.0\.1\:9000\;/' conf/nginx.conf > /etc/nginx/nginx.conf
 
 # Copy in a nginx configuration file for common and best-practices
 # SSL settings from @konklone. Replace STORAGE_ROOT so it can find
@@ -59,16 +59,13 @@ sed "s#STORAGE_ROOT#$STORAGE_ROOT#" \
 
 # Fix some nginx defaults.
 # The server_names_hash_bucket_size seems to prevent long domain names?
-$PYTHON tools/editconf.py /etc/nginx/nginx.conf -s \
-	server_names_hash_bucket_size="64;"
-#if [ "$DISTRO" = "RedHat" ]; then
-#	JOB_PID=$$
-#	head -n1 /etc/nginx/nginx.conf > nginx.conf.$JOB_PID
-#	echo "http {" >> nginx.conf.$JOB_PID
-#	tail -n+3 /etc/nginx/nginx.conf >> nginx.conf.$JOB_PID
-#	mv nginx.conf.$JOB_PID /etc/nginx/nginx.conf
-#	echo "}" >> /etc/nginx/nginx.conf
-#fi
+if [ "$DISTRO" = "Ubuntu" ]; then
+	$PYTHON tools/editconf.py /etc/nginx/nginx.conf -s \
+		server_names_hash_bucket_size="64;"
+elif [ "$DISTRO" = "RedHat" ]; then
+# This Python tool is garbage, it only works on Ubuntu
+	adjust_main_nginx_config
+fi
 
 # Bump up PHP's max_children to support more concurrent connections
 if [ "$DISTRO" = "Ubuntu" ]; then
