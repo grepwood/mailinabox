@@ -39,6 +39,7 @@ if [ ! -d /usr/local/lib/owncloud/ ] \
 	unzip -u -o -q /tmp/owncloud.zip -d /usr/local/lib #either extracts new or replaces current files
 	hide_output $PHP /usr/local/lib/owncloud/occ upgrade #if OC is up-to-date it wont matter
 	rm -f /tmp/owncloud.zip
+	echo "breakpoint"
 fi
 
 # ### Configuring ownCloud
