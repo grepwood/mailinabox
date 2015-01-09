@@ -37,8 +37,8 @@ elif [ "$DISTRO" = "RedHat" ]; then
 		if [ "$DISTRO_VERSION" -lt "70" ]; then
 			rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm 2>/dev/null
 		elif [ "$DISTRO_VERSION" -ge "70" ]; then
-			FILE=`curl http://dl.fedoraproject.org/pub/epel//7/x86_64/e/ 2>/dev/null | grep "epel\-release" | sed 's/^.*\<a\ href=\"//' | sed 's/\">.*//'`
-			rpm -Uvh http://dl.fedoraproject.org/pub/epel//7/x86_64/e/$FILE 2>/dev/null
+			FILE=`curl http://dl.fedoraproject.org/pub/epel/7/x86_64/e/ 2>/dev/null | grep "epel\-release" | sed 's/^.*\<a\ href=\"//' | sed 's/\">.*//'`
+			rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/$FILE 2>/dev/null
 		fi
 	fi
 	yum install wget curl sudo python-devel python-pip fail2ban screen -y -q --enablerepo=epel >/dev/null
