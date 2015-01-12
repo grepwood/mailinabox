@@ -63,7 +63,7 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 	$PYTHON tools/editconf.py /etc/nginx/nginx.conf -s \
 		server_names_hash_bucket_size="64;"
 elif [ "$DISTRO" = "RedHat" ]; then
-# This Python tool is garbage, it only works on Ubuntu
+# This Python tool is garbage, it only works on Ubuntu. We're using our own function that abuses sed
 	adjust_main_nginx_config
 fi
 

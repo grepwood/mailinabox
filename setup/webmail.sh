@@ -30,9 +30,9 @@ elif [ "$DISTRO" = "RedHat" ]; then
 	yum install dbconfig_omg \
 		php55 php55-php-{intl,mcrypt,pecl-{jsonc,gnupg,sqlite},pspell,gd} \
 		tinymce -y -q --enablerepo=remi,remi-php55 >/dev/null
-	/opt/remi/php55/root/usr/bin/pear install pear/Mail_Mime pear/Net_Sieve pear/Net_Socket
-	rpm -Uvh ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/PerryWerneck/CentOS_CentOS-6/noarch/jquery-1.9.1-24.1.noarch.rpm
-#we really need a maintained version of jquery ;_;
+	/opt/remi/php55/root/usr/bin/pear install pear/Mail_Mime pear/Net_Sieve pear/Net_Socket 2>/dev/null
+	yum install npm -y -q 2>/dev/null
+	npm install jquery jquery-mousewheel
 fi
 
 # We used to install Roundcube from Ubuntu, without triggering the dependencies #NODOC
