@@ -92,6 +92,43 @@ if [ ! -f $STORAGE_ROOT/owncloud/owncloud.db ]; then
 );
 ?>
 EOF
+	elif [ "$DISTRO" = "RedHat" ]; then
+		cat > /usr/local/lib/owncloud/config/config.php <<EOF;
+<?php
+\$CONFIG = array (
+  'datadirectory' => '$STORAGE_ROOT/owncloud',
+
+  'instanceid' => '$instanceid',
+
+  'trusted_domains' => 
+    array (
+      0 => '$PRIMARY_HOSTNAME',
+    ),
+  'forcessl' => true, # if unset/false, ownCloud sends a HSTS=0 header, which conflicts with nginx config
+
+  'overwritewebroot' => '/cloud',
+  'user_backends' => array(
+    array(
+      'class'=>'OC_User_IMAP',
+      'arguments'=>array('{localhost:993/imap/ssl/novalidate-cert}')
+    )
+  ),
+  "memcached_servers" => array (
+    array('localhost', 11211),
+  ),
+  'mail_smtpmode' => 'sendmail',
+  'mail_smtpsecure' => '',
+  'mail_smtpauthtype' => 'LOGIN',
+  'mail_smtpauth' => false,
+  'mail_smtphost' => '',
+  'mail_smtpport' => '',
+  'mail_smtpname' => '',
+  'mail_smtppassword' => '',
+  'mail_from_address' => 'owncloud',
+  'mail_domain' => '$PRIMARY_HOSTNAME',
+);
+?>
+EOF
 	fi
 	# Create an auto-configuration file to fill in database settings
 	# when the install script is run. Make an administrator account
@@ -117,11 +154,9 @@ EOF
 	chown -R www-data.www-data $STORAGE_ROOT/owncloud /usr/local/lib/owncloud
 	# Execute ownCloud's setup step, which creates the ownCloud sqlite database.
 	# It also wipes it if it exists. And it deletes the autoconfig.php file.
-	if [ "$DISTRO" = "Ubuntu" ]; then
-		(cd /usr/local/lib/owncloud; sudo -u www-data php /usr/local/lib/owncloud/index.php;)
-	elif [ "$DISTRO" = "RedHat" ]; then
-		(cd /usr/local/lib/owncloud; sudo -u www-data php55 /usr/local/lib/owncloud/index.php;)
-	fi
+	echo "breakpoint 2"
+	(cd /usr/local/lib/owncloud; cp autoconfig.php backup.autoconfig.php;)
+	(cd /usr/local/lib/owncloud; sudo -u www-data $PHP /usr/local/lib/owncloud/index.php;)
 fi
 # Enable/disable apps. Note that this must be done after the ownCloud setup.
 # The firstrunwizard gave Josh all sorts of problems, so disabling that.
@@ -146,19 +181,11 @@ $PYTHON tools/editconf.py $PHP_INI -c ';' \
 
 # Set up a cron job for owncloud.
 if [ ! -d "/etc/cron.hourly" ]; then mkdir /etc/cron.hourly; fi
-if [ "$DISTRO" = "Ubuntu" ]; then
-	cat > /etc/cron.hourly/mailinabox-owncloud << EOF;
+cat > /etc/cron.hourly/mailinabox-owncloud << EOF;
 #!/bin/bash
 # Mail-in-a-Box
-sudo -u www-data php -f /usr/local/lib/owncloud/cron.php
+sudo -u www-data $PHP -f /usr/local/lib/owncloud/cron.php
 EOF
-elif [ "$DISTRO" = "RedHat" ]; then
-	cat > /etc/cron.hourly/mailinabox-owncloud << EOF;
-#!/bin/bash
-# Mail-in-a-Box
-sudo -u www-data php55 -f /usr/local/lib/owncloud/cron.php
-EOF
-fi
 chmod +x /etc/cron.hourly/mailinabox-owncloud
 
 # There's nothing much of interest that a user could do as an admin for ownCloud,
