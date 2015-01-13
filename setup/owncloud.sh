@@ -14,21 +14,17 @@ if [ "$DISTRO" = "Ubuntu" ]; then
 		php5 php5-dev php5-gd php5-fpm memcached php5-memcache unzip
 
 	apt-get purge -qq -y owncloud*
+	PHP="php"
 elif [ "$DISTRO" = "RedHat" ]; then
 	yum install php55-php-{mbstring,pdo,cli,pear,xml,fpm,gd,imap,pecl-{memcache,sqlite}} \
 		curl apr libtool libcurl-devel php55 memcached unzip -y -q --enablerepo=remi,remi-php55 >/dev/null
 	if [ "`/opt/remi/php55/root/bin/pear list | grep ^Net_IMAP | wc -l`" -eq "0" ]; then
 		/opt/remi/php55/root/bin/pear install pear/Net_IMAP
 	fi
+	PHP="php55"
 fi
 # Install ownCloud from source of this version:
 owncloud_ver=7.0.3
-
-if [ "$DISTRO" = "RedHat" ]; then
-	PHP="php55"
-elif [ "$DISTRO" = "Ubuntu" ]; then
-	PHP="php"
-fi
 # Check if ownCloud dir exist, and check if version matches owncloud_ver (if either doesn't - install/upgrade)
 if [ ! -d /usr/local/lib/owncloud/ ] \
 	|| ! grep -q $owncloud_ver /usr/local/lib/owncloud/version.php; then
@@ -48,14 +44,12 @@ fi
 # the database does exist wipes the database and user data.
 if [ ! -f $STORAGE_ROOT/owncloud/owncloud.db ]; then
 	# Create a configuration file.
-	if [ -f "/etc/timezone" ]; then
-		TIMEZONE=$(cat /etc/timezone)
-	else
-		TIMEZONE=""
+	if [ -f "/etc/timezone" ] || [ "`cat /etc/timezone`" = "" ]; then
+		tzselect > /etc/timezone
 	fi
+	TIMEZONE=$(cat /etc/timezone)
 	instanceid=oc$(echo $PRIMARY_HOSTNAME | sha1sum | fold -w 10 | head -n 1)
-	if [ "$DISTRO" = "Ubuntu" ]; then
-		cat > /usr/local/lib/owncloud/config/config.php <<EOF;
+	cat > /usr/local/lib/owncloud/config/config.php <<EOF;
 <?php
 \$CONFIG = array (
   'datadirectory' => '$STORAGE_ROOT/owncloud',
@@ -92,44 +86,44 @@ if [ ! -f $STORAGE_ROOT/owncloud/owncloud.db ]; then
 );
 ?>
 EOF
-	elif [ "$DISTRO" = "RedHat" ]; then
-		cat > /usr/local/lib/owncloud/config/config.php <<EOF;
-<?php
-\$CONFIG = array (
-  'datadirectory' => '$STORAGE_ROOT/owncloud',
-
-  'instanceid' => '$instanceid',
-
-  'trusted_domains' => 
-    array (
-      0 => '$PRIMARY_HOSTNAME',
-    ),
-  'forcessl' => true, # if unset/false, ownCloud sends a HSTS=0 header, which conflicts with nginx config
-
-  'overwritewebroot' => '/cloud',
-  'user_backends' => array(
-    array(
-      'class'=>'OC_User_IMAP',
-      'arguments'=>array('{localhost:993/imap/ssl/novalidate-cert}')
-    )
-  ),
-  "memcached_servers" => array (
-    array('localhost', 11211),
-  ),
-  'mail_smtpmode' => 'sendmail',
-  'mail_smtpsecure' => '',
-  'mail_smtpauthtype' => 'LOGIN',
-  'mail_smtpauth' => false,
-  'mail_smtphost' => '',
-  'mail_smtpport' => '',
-  'mail_smtpname' => '',
-  'mail_smtppassword' => '',
-  'mail_from_address' => 'owncloud',
-  'mail_domain' => '$PRIMARY_HOSTNAME',
-);
-?>
-EOF
-	fi
+#	elif [ "$DISTRO" = "RedHat" ]; then
+#		cat > /usr/local/lib/owncloud/config/config.php <<EOF;
+#<?php
+#\$CONFIG = array (
+#  'datadirectory' => '$STORAGE_ROOT/owncloud',
+#
+#  'instanceid' => '$instanceid',
+#
+#  'trusted_domains' => 
+#    array (
+#      0 => '$PRIMARY_HOSTNAME',
+#    ),
+#  'forcessl' => true, # if unset/false, ownCloud sends a HSTS=0 header, which conflicts with nginx config
+#
+#  'overwritewebroot' => '/cloud',
+#  'user_backends' => array(
+#    array(
+#      'class'=>'OC_User_IMAP',
+#      'arguments'=>array('{localhost:993/imap/ssl/novalidate-cert}')
+#    )
+#  ),
+#  "memcached_servers" => array (
+#    array('localhost', 11211),
+#  ),
+#  'mail_smtpmode' => 'sendmail',
+#  'mail_smtpsecure' => '',
+#  'mail_smtpauthtype' => 'LOGIN',
+#  'mail_smtpauth' => false,
+#  'mail_smtphost' => '',
+#  'mail_smtpport' => '',
+#  'mail_smtpname' => '',
+#  'mail_smtppassword' => '',
+#  'mail_from_address' => 'owncloud',
+#  'mail_domain' => '$PRIMARY_HOSTNAME',
+#);
+#?>
+#EOF
+#	fi
 	# Create an auto-configuration file to fill in database settings
 	# when the install script is run. Make an administrator account
 	# here or else the install can't finish.
